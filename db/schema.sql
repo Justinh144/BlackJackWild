@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS wildjack_db;
+CREATE DATABASE wildjack_db;
