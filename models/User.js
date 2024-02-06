@@ -35,11 +35,11 @@ User.init(
         len: [3],
       },
     },
-    // chipCount: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false,
-    //   defaultValue: 1000,
-    // }
+    chipCount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 20000,
+    },
   },
   {
     hooks: {

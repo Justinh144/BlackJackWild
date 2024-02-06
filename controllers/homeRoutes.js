@@ -24,11 +24,16 @@ router.get('/profile', withAuth, async (req, res) => {
          attributes: { exclude: ['password'] },
          include: [{ model: Project }],
        });
-      console.log('user data is ', + userData);
+       
+       const formattedUserData = userData.get({ plain:true });
+       const chipCount = formattedUserData.chipCount;
+
+      console.log('user data is ', formattedUserData);
        const user = userData.get({ plain: true });
    
        res.render('profile', {
          ...user,
+         chipCount,
          logged_in: true
        });
      } catch (err) {
