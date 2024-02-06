@@ -1,0 +1,8 @@
+[
+    {
+      "name": "Fix account issue",
+      "description": "Account creation and log in works but follows the mini project model and needs to be detached from project dependencies",
+      "needed_funding": 1000000000000000000000000000000
+    }
+  ]
+  
