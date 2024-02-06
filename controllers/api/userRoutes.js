@@ -59,4 +59,10 @@ router.post('/logout', (req, res) => {
   }
 });
 
+// test user get
+router.get('/:id', async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  res.json(user);
+});
+
 module.exports = router;

@@ -1,10 +1,11 @@
-const Card = require('../../models/Card');
+const { Card } = require('../../models');
 
 const createDeck = async () => {
     try{
         const allcards = await Card.findAll({
             attributes: ['value', 'card_name'],
         });
+        // console.log(allcards)
         const formattedCards = allcards.map((card) => card.get({ plain: true }));
         // shuffle them randomly
         const deck = shuffleDeck(formattedCards);
@@ -46,7 +47,9 @@ const drawCard = (deck, numOfCards) => {
 
 const deal = (deck, numOfCards) => {
     try{
-        return drawCard(deck, numOfCards);
+        const cards = drawCard(deck, numOfCards);
+        // console.log(cards);
+        return cards;
     } catch(err) {
         console.error(`Error dealing: ${err}`);
     }
