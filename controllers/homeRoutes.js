@@ -25,15 +25,12 @@ router.get('/profile', withAuth, async (req, res) => {
          include: [{ model: Project }],
        });
        
-       const formattedUserData = userData.get({ plain:true });
-       const chipCount = formattedUserData.chipCount;
-
-      console.log('user data is ', formattedUserData);
        const user = userData.get({ plain: true });
+
+       console.log('user data is ', user);
    
        res.render('profile', {
          ...user,
-         chipCount,
          logged_in: true
        });
      } catch (err) {
