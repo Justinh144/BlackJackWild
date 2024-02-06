@@ -1,0 +1,36 @@
+.chip_container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.chip_count{
+    position: relative;
+    top: 10%;
+    width: 90%;
+    height: 20%;
+    background-color: white;
+}
+
+.chips{
+    position: relative;
+    top: 5%;
+    width: 6em;
+    height: 6em;
+    border-radius: 50%;
+    background-color: pink;
+    margin: 3%;
+}
+
+#chips_100{
+    
+}
+#chips_500{
+    
+}
+#chips_1000{
+    
+}
+#chips_2500{
+    
+}

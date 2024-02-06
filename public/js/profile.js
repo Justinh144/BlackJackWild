@@ -46,3 +46,11 @@ const newFormHandler = async (event) => {
     .querySelector('.project-list')
     .addEventListener('click', delButtonHandler);
   
+const newGameHandler = async () => {
+
+
+}
+
+  document
+    .querySelector('.classic-mode')
+    addEventListener('click', newGameHandler);

@@ -1,0 +1,261 @@
+body {
+    display: flex;
+    align-items: center;
+    width: 95vw;
+}
+
+.main_container {
+    display: flex;
+    flex-direction: column;
+    background-image: url('../images/images/table2.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    
+}
+
+.menu{
+    background-color: rgba(0,0,0,0.25);
+    border-radius: 25px;
+    width: 90%;
+    height: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* ******************************************* */
+
+.top_container {
+    display: flex;
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    width: 100%;
+    height: 40%;
+}
+
+.menu_container {
+    width: 25%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dealer_container {
+    /* background-color: yellow; */
+    width: 50%;
+    height: audo;
+}
+
+.deck_container {
+    /* background-color: orange; */
+    width:25%;
+    height: auto;
+}
+
+/* ----------- */
+
+.dealer_card {
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    /* width:25%; */
+    /* height: auto; */
+}
+
+/* ******************************************* */
+
+.spacer_container {
+    display: flex;
+    /* background-color: darkgreen; */
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    width: 100%;
+    height: 20%;
+}
+
+/* ******************************************* */
+
+.bottom_container {
+    display: flex;
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    width: 100%;
+    height: 40%;
+}
+.chip_container {
+    width: 25%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player_container {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    justify-content: center;
+    /* background-color: lightblue; */
+    width: 50%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.bet_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+    height: auto;
+}
+ /* ------------- */
+
+.player_center {
+    
+}
+
+.player_card {
+    position: relative;
+    top: 3em;
+    left: -2em;
+    border: 1px;
+    border-color: black;
+    border-style: solid;
+    width: 8em;
+    height: 12em;
+    margin: 0 auto;
+}
+
+#player_card_1{
+    background-color: black;
+    z-index: 1;
+}
+#player_card_2{
+    top: -8em;
+    left: 1em;
+    background-color: red;
+    z-index: 2;
+}
+#player_card_3{
+    top: -19em;
+    left: 3em;
+    background-color: blue;
+    z-index: 3;
+}
+#player_card_4{
+    top: -30em;
+    left: 5em;
+    background-color: green;
+    z-index: 4;
+}
+#player_card_5{
+    top: -41em;
+    left: 7em;
+    background-color: yellow;
+    z-index: 5;
+}
+
+/* @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+@media screen and (max-width: 768px) {
+    body {
+        display: flex;
+        align-items: center;
+        width: 90vw;
+    }
+    
+    .main_container {
+        display: flex;
+        flex-direction: column;
+        background-color: darkgreen;
+        width: 100%;
+        height: 100vh;
+        
+    }
+    
+    /* ******************************************* */
+    
+    .top_container {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px;
+        border-color: black;
+        border-style: solid;
+        width: 100%;
+        height: 40%;
+    }
+    
+    .menu_container {
+        order: 1;
+        background-color: darkred;
+        width: 50%;
+        height: 50%;
+    }
+    
+    .dealer_container {
+        order: 3;
+        background-color: lightyellow;
+        width: 100%;
+        height: 50%;
+    }
+    
+    .deck_container {
+        order: 2;
+        background-color: darkorange;
+        width: 50%;
+        height: 50%;
+    }
+    
+    /* ******************************************* */
+    
+    .spacer_container {
+        display: flex;
+        background-color: lightgreen;
+        border: 1px;
+        border-color: black;
+        border-style: solid;
+        width: 100%;
+        height: 20%;
+    }
+    
+    /* ******************************************* */
+    
+    .bottom_container {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px;
+        border-color: black;
+        border-style: solid;
+        width: 100%;
+        height: 40%;
+    }
+    .chip_container {
+        /* background-color: blueviolet; */
+        order: 3;
+        width: 50%;
+        height: 50%;
+    }
+    
+    .player_container {
+        order: 1;
+        /* background-color: lightcoral; */
+        width: 100%;
+        height: 50%;
+        
+    }
+    
+    .bet_container {
+        order: 2;
+        /* background-color: gray; */
+        width: 50%;
+        height: 50%;
+    }
+  }
+
+  
