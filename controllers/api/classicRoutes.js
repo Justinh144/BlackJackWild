@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const { User, Card } = require('../../models');
+const { Game } = require('../../utils/gameplay/blackjack');
+const withAuth = require('../../utils/auth');
 
 
 // router.get('/', async (req, res) => {
@@ -30,25 +32,19 @@ const { User, Card } = require('../../models');
 // });
 
 
-router.get('/classic', async (req, res) => {
+// In your router file
+router.get('/start-game', withAuth, async (req, res) => {
     try {
-        const userId = req.session.userId;
-
-        let game = req.session.game;
-        if (!game) {
-            game = new BlackjackGame(userId);
-            req.session.game = game;
-        }
-
-        const continueGame = await game.startRound();
-
-        // Send the game state as a response (you might want to render a template or send JSON)
-        res.send(`Game state: ${continueGame ? 'Continue' : 'Game Over'}`);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+        const game = new Game(req.session.user_id);
+        await game.initialize();
+        game.startRound();
+        res.status(200).json({ message: 'Game started' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to start game' });
     }
 });
+
 
 
 module.exports = router

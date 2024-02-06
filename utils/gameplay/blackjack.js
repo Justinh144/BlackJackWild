@@ -85,17 +85,5 @@ class Game {
     };
 }
 
-const game = new Game(1);
 
-async function playGame() {
-    try {
-        await game.initialize();
-        game.startRound();
-    } catch (error) {
-        console.error('Error during game initialization:', error);
-    }
-}
-
-playGame();
-
-module.exports = Game;
+module.exports = { Game };
