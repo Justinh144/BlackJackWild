@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const withAuth = require('../utils/auth');
 const { Project, User , Card } = require('../models');
+// const { Game } = require('../utils/gameplay/blackjack');
 
 router.get('/', (req, res) => {
      res.render('homepage');
@@ -27,7 +28,7 @@ router.get('/profile', withAuth, async (req, res) => {
        
        const user = userData.get({ plain: true });
 
-       console.log('user data is ', user);
+      //  console.log('user data is ', user);
    
        res.render('profile', {
          ...user,
@@ -38,30 +39,22 @@ router.get('/profile', withAuth, async (req, res) => {
      }
    });
 
-   router.get('/classic', withAuth , async (req, res) => {
+   router.get('/classic', withAuth, async (req, res) => {
     try {
-        // console.log('hit classic')
-        // const userData = await User.findAll({
-        //     include: [{
-        //         model: User,
-        //         attributes: ['name'],
-        //     },
-        //     {
-        //         model: Card,
-        //         attributes: ['cardname', 'filename']
-        //     }],
-        // });
-        // console.log('User Data is   ', + userData);
-        const cards =  await Card.findAll({})
+        const userData = await User.findByPk(req.session.user_id);
+        const user = userData.get({ plain: true });
+        // console.log(user);
+        const cards = await Card.findAll({});
+
+        // Render the classic.handlebars page
         res.render('classic', {
             logged_in: req.session.logged_in,
-            // users: userData,
-            // cards: cards,
+            cards: cards,
+            user: user,
         });
-        console.log("Classic rendered??")
     } catch (err) {
         console.error(err);
-        res.status(500).render('error', {error: err });
+        res.status(500).render('error', { error: err });
     }
 });
 
