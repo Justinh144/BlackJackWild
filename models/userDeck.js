@@ -17,6 +17,16 @@ UserDeck.init(
         key: 'id',
       },
     },
+    power_ups: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    special_cards: {
+      references: {
+        model: 'wild_card',
+        key: 'id',
+      }
+    },
   },
   {
     sequelize,
