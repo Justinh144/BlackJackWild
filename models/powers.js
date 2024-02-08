@@ -1,35 +1,35 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("..config/connection");
 
-class WildCard extends Model {}
+class Powers extends Model {}
 
-WildCard.init(
+Powers.init(
     {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            primaryKey: true,
+            primaryKey: false,
             autoIncrement: true,
         },
-        cardname: {
+        powername: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        filename: {
+        fileName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        value: {
-            type: DataTypes.INTEGER,
+        description: {
+            type: DataTypes.STRING,
             allowNull: false,
-        },    
+        },
     },
     {
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: "WildCard"
+        modelName: "Powers"
     }
 );
 
-module.exports = WildCard;
+module.exports = Powers;

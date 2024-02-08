@@ -18,10 +18,9 @@ UserDeck.init(
       },
     },
     power_ups: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      
     },
-    special_cards: {
+    wild_cards: {
       references: {
         model: 'wild_card',
         key: 'id',
@@ -32,7 +31,7 @@ UserDeck.init(
     sequelize,
     freezeTableName: true,
     underscored: true,
-    modelName: "Cards",
+    modelName: "UserDeck",
   }
 );
 
