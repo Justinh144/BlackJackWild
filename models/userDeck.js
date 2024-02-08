@@ -12,15 +12,21 @@ UserDeck.init(
       autoIncrement: true,
     },
     userDeck_id: {
+      id: DataTypes.INTEGER,
       references: {
         model: 'user',
         key: 'id',
       },
     },
-    power_ups: {
-      
+    power_id: {
+      id: DataTypes.INTEGER,
+      references: {
+        model: 'powers',
+        key: 'id'
+      }
     },
     wild_cards: {
+      id: DataTypes.INTEGER,
       references: {
         model: 'wild_card',
         key: 'id',
@@ -31,7 +37,7 @@ UserDeck.init(
     sequelize,
     freezeTableName: true,
     underscored: true,
-    modelName: "UserDeck",
+    modelName: "userdeck",
   }
 );
 

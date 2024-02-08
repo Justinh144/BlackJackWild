@@ -28,7 +28,7 @@ Powers.init(
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: "Powers"
+        modelName: "powers"
     }
 );
 

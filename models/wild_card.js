@@ -28,7 +28,7 @@ WildCard.init(
         sequelize,
         freezeTableName: true,
         underscored: true,
-        modelName: "WildCard"
+        modelName: "wildcard"
     }
 );
 
