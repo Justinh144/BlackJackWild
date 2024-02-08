@@ -1,5 +1,5 @@
 const readlineSync = require('readline-sync');
-const { calculateHandValue, checkWinner, calculateNewBalance } = require('./scores');
+const { checkWinner, calculateNewBalance } = require('./scores');
 const { createDeck, deal } = require('./deck_handler');
 const { bet, getUserDecision, drawComputerCard } = require('./actions');
 const { User } = require('../../models');
@@ -24,7 +24,6 @@ class Game {
     }
 
     async startRound() {
-        await this.initialize();
     
         let continueGame = true;
         while (continueGame) {
@@ -86,4 +85,9 @@ class Game {
 }
 
 
-module.exports = { Game };
+// module.exports = { Game };
+
+// const game = new Game(1);
+// const hand = [{ value: 1 }, { value:2 }];
+// const handValue = game.calculateHandValue(hand);
+// console.log('Hand value:', handValue);

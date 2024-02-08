@@ -18,10 +18,8 @@ const stand = () => {
 
 const bet = (playerBalance) => {
     try {
-        const betAmount = readlineSync.questionInt(`How much would you like to bet? (Current balance: ${playerBalance}) $`);
 
         if (betAmount <= 0 || betAmount > playerBalance) {
-            console.log('Invalid bet amount. Please enter a valid amount.');
             return bet(playerBalance);
         }
 
