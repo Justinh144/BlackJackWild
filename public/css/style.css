@@ -1,5 +1,5 @@
 body {
-    display: flex;
+    /* display: flex; */
     align-items: center;
     width: 95vw;
 }
@@ -7,9 +7,9 @@ body {
 .main_container {
     display: flex;
     flex-direction: column;
-    background-image: url('../images/images/table2.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-image: url('../images/table_images/blanktablebg.jpg');
+    /* background-size: cover; */
+    background-repeat: repeat;
     width: 100%;
     height: 100vh;
     
@@ -30,24 +30,58 @@ body {
 .top_container {
     display: flex;
     border: 1px;
-    border-color: black;
-    border-style: solid;
+    /* border-color: black;
+    border-style: solid; */
     width: 100%;
     height: 40%;
 }
 
 .menu_container {
-    width: 25%;
-    height: auto;
     display: flex;
     align-items: center;
+    justify-content: center;;
+    width: 25%;
+    height: auto;
+    /* background-color: rgba(0,0,0,0.25);
+    border-radius: 25px; */
+}
+
+.main_menu {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    background-color: rgba(0,0,0,0.25);
+    border-radius: 25px;
+    width: 90%;
+    height: 90%;
+
+    /* border: 1px;
+    border-color: black;
+    border-style: solid; */
+}
+
+.menu_btn{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .dealer_container {
-    /* background-color: yellow; */
+    background-image: url('../images/table_images/tablegraphics_dealer.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: .9;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    justify-content: center;
     width: 50%;
-    height: audo;
+    margin: 0 auto;
 }
 
 .deck_container {
@@ -56,24 +90,56 @@ body {
     height: auto;
 }
 
+.deck {
+    position: relative;
+    top: 3em;
+    left: -2em;
+    /* border: 1px;
+    border-color: black;
+    border-style: solid; */
+    width: 8em;
+    height: 12em;
+    margin: 0 auto;
+}
+
+.deck img {
+    transform: rotate(45deg);
+    width: 100%;
+    height: 100%;
+}
+
 /* ----------- */
 
 .dealer_card {
-    border: 1px;
+    position: relative;
+    top: 1em;
+    /* left: -2em; */
+    /* border: 1px;
     border-color: black;
-    border-style: solid;
-    /* width:25%; */
-    /* height: auto; */
+    border-style: solid; */
+    width: 8em;
+    height: 12em;
+    margin: 0 auto;
+}
+
+#dealer_card_1{
+    /* border: .25em solid rgba(255,255,255,.9);
+    border-radius: 1.25em; */
+    z-index: 1;
 }
 
 /* ******************************************* */
 
 .spacer_container {
     display: flex;
-    /* background-color: darkgreen; */
+    background-image: url('../images/table_images/tablegraphics_middle.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: .9;
     border: 1px;
-    border-color: black;
-    border-style: solid;
+    /* border-color: black; */
+    /* border-style: solid; */
     width: 100%;
     height: 20%;
 }
@@ -83,8 +149,8 @@ body {
 .bottom_container {
     display: flex;
     border: 1px;
-    border-color: black;
-    border-style: solid;
+    /* border-color: black;
+    border-style: solid; */
     width: 100%;
     height: 40%;
 }
@@ -95,6 +161,7 @@ body {
     align-items: center;
     justify-content: center;
 }
+
 
 .player_container {
     display: flex;
@@ -113,7 +180,51 @@ body {
     justify-content: center;
     width: 25%;
     height: auto;
+
+    /* border-color: black;
+    border-style: solid; */
 }
+
+.bet_menu {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.25);
+    border-radius: 25px;
+    width: 90%;
+    height: 90%;
+    /* border: 1px;
+    border-color: black;
+    border-style: solid; */
+}
+
+.bet_btn{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.button {
+    background-color: #006187;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 80%;
+    padding: .1em;
+    margin: .1em auto;
+
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+
  /* ------------- */
 
 .player_center {
@@ -124,40 +235,42 @@ body {
     position: relative;
     top: 3em;
     left: -2em;
-    border: 1px;
+    /* border: 1px;
     border-color: black;
-    border-style: solid;
+    border-style: solid; */
     width: 8em;
     height: 12em;
     margin: 0 auto;
 }
 
 #player_card_1{
-    background-color: black;
+    border: .25em solid rgba(255,255,255,.9);
+    border-radius: 1.25em;
     z-index: 1;
 }
 #player_card_2{
     top: -8em;
     left: 1em;
-    background-color: red;
+    /* border: .25em solid rgba(255,255,255,.9);
+    border-radius: 1.25em; */
     z-index: 2;
 }
 #player_card_3{
     top: -19em;
     left: 3em;
-    background-color: blue;
+    /* background-color: blue; */
     z-index: 3;
 }
 #player_card_4{
     top: -30em;
     left: 5em;
-    background-color: green;
+    /* background-color: green; */
     z-index: 4;
 }
 #player_card_5{
     top: -41em;
     left: 7em;
-    background-color: yellow;
+    /* background-color: yellow; */
     z-index: 5;
 }
 
@@ -173,7 +286,7 @@ body {
     .main_container {
         display: flex;
         flex-direction: column;
-        background-color: darkgreen;
+        /* background-color: darkgreen; */
         width: 100%;
         height: 100vh;
         
@@ -184,42 +297,44 @@ body {
     .top_container {
         display: flex;
         flex-wrap: wrap;
-        border: 1px;
+        /* border: 1px;
         border-color: black;
-        border-style: solid;
+        border-style: solid; */
         width: 100%;
         height: 40%;
     }
     
     .menu_container {
         order: 1;
-        background-color: darkred;
+        /* background-color: darkred; */
         width: 50%;
         height: 50%;
     }
     
     .dealer_container {
         order: 3;
-        background-color: lightyellow;
+        /* background-color: lightyellow; */
         width: 100%;
         height: 50%;
     }
     
     .deck_container {
         order: 2;
-        background-color: darkorange;
+        /* background-color: darkorange; */
         width: 50%;
         height: 50%;
     }
+
+
     
     /* ******************************************* */
     
     .spacer_container {
         display: flex;
-        background-color: lightgreen;
-        border: 1px;
+        /* background-color: lightgreen; */
+        /* border: 1px;
         border-color: black;
-        border-style: solid;
+        border-style: solid; */
         width: 100%;
         height: 20%;
     }
@@ -229,18 +344,20 @@ body {
     .bottom_container {
         display: flex;
         flex-wrap: wrap;
-        border: 1px;
+        /* border: 1px;
         border-color: black;
-        border-style: solid;
+        border-style: solid; */
         width: 100%;
         height: 40%;
     }
     .chip_container {
         /* background-color: blueviolet; */
-        order: 3;
+        order: 2;
         width: 50%;
         height: 50%;
     }
+
+
     
     .player_container {
         order: 1;
@@ -251,7 +368,7 @@ body {
     }
     
     .bet_container {
-        order: 2;
+        order: 3;
         /* background-color: gray; */
         width: 50%;
         height: 50%;
@@ -259,3 +376,50 @@ body {
   }
 
   
+/* ~~~~~~~~~ANIMATIONS~~~~~~~~~~ */
+
+  .card {
+    perspective: 1000px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.1);
+  }
+  
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+  }
+  
+  .card.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  .card-front,
+  .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .card-back {
+    transform: rotateY(180deg);
+  }
+
+  .card img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+  }
