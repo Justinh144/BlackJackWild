@@ -22,11 +22,11 @@ const seedDeck = async () => {
 
     for (const suit of suits) {
       for (const value of values) {
-        const cardName = `${value} of ${suit}`;
-        const filename = `card_${value}_${suit}`; // You can replace this with actual file names if needed
+        const cardname = `${value} of ${suit}`;
+        const filename = `card_${value}_${suit}.png`; // You can replace this with actual file names if needed
 
         const card = {
-          cardName,
+          cardname,
           filename,
           value: getValue(value),
           suit,
