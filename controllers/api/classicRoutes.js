@@ -441,7 +441,6 @@ router.post('/loss', async (req, res) => {
         gameState.playerBalance = gameState.playerBalance;
         gameState.playerBet = 0;
 
-        bankRoll.textContent
         
         res.status(200).json({ message: 'res object after loss', gameState: gameState});
     } catch(err) {
