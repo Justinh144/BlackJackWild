@@ -5,9 +5,12 @@ const doublednBtn = document.querySelector('#doubledn_btn');
 const stayBtn = document.querySelector('#stay_btn');
 const chipBtns = document.getElementsByClassName('chips');
 
+let currentHand = 'splitHand1';
+let isUserSplit = false;
+
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // initialize();
+        initialize();
         initializeGameUI();
     } catch (err) {
         console.error('Error starting game:', err);
@@ -38,6 +41,20 @@ const initializeGameUI = () => {
                 sendBet(playerBet);
             });
         });
+        document.addEventListener('keypress', async (event) => {
+            try {
+                if (event.key === ' ') {
+                    event.preventDefault();
+                    // console.log('keypress');
+                    await toggleHand();
+                } else {
+                    console.log('no split occurred');
+                }
+            } catch (err) {
+                console.error('Error toggling hand:', err);
+            }
+        });
+
     } catch (err) {
         console.error('Error initializing game UI:', err);
     }
@@ -71,7 +88,7 @@ const initialize = async () => {
 
 const sendBet = async (placedBet) => {
     try {
-        await initialize();
+        // await initialize();
         const response = await fetch('/api/classic/bet', {
             method: "POST",
             headers: {
@@ -92,23 +109,39 @@ function updateChipCount(newChipCount) {
 }
 
 const sendDecision = async (decision) => {
-    try {
+    try { 
         const response = await fetch("/api/classic/" + decision, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ decision }),
+            body: JSON.stringify({ decision, currentHand }),
         });
         const data = await response.json();
         console.log(data);
 
-        // location.reload();
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-const newGame = () => {
-    
+const toggleHand = async () => {
+    try {
+        const response = await fetch('/api/classic/togglehand', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await response.json();
+        console.log(data);
+
+        if (data.success) {
+            console.log(data.message);
+        } else {
+            console.error('Falied to toggle hand:', data.message);
+        }
+    } catch (error) {
+        console.error('Error toggling hand:', error);
+    }
 };
