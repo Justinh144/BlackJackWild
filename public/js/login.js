@@ -44,10 +44,33 @@ const loginFormHandler = async (event) => {
     }
   };
   
-  document
-    .querySelector('.login-form')
-    .addEventListener('submit', loginFormHandler);
+  const displayLogin = async (event) => {
+    event.preventDefault();
+  console.log('hit displayLogin');
   
-  document
-    .querySelector('.signup-form')
-    .addEventListener('submit', signupFormHandler);
+      const response = await fetch('/login', {
+        method: 'GET',
+      });
+  
+      if (response.ok) {
+        // If successful, redirect the browser to the login page
+        document.location.replace('/login');
+      } else {
+        alert(response.statusText);
+      }
+    };
+
+  // document
+  //   .querySelector('.login-form')
+  //   .addEventListener('submit', loginFormHandler);
+  
+  // document
+  //   .querySelector('.signup-form')
+  //   .addEventListener('submit', signupFormHandler);
+
+    const luckyBtn = document.querySelector('.lucky-button');
+
+luckyBtn.addEventListener('click', () => {
+  window.location.replace('/login');
+
+});

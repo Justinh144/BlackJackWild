@@ -4,3 +4,10 @@ function flipCard() {
   }
 
   console.log("hello");
+
+
+const classicBtn = document.querySelector('.lucky-button');
+
+classicBtn.addEventListener('click', () => {
+  window.location.replace('/login');
+});

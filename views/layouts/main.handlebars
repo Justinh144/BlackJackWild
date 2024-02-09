@@ -27,15 +27,16 @@
         {{#if logged_in}}
         <a href="/profile" class="profile-button">Profile</a> |
         <button class="no-button logout-button" id="logout">Logout</button>
-       </div class="container">
+  {{!-- </div class="container"> --}}
         {{else}}
         
-        <a href="/login" class="lucky-button">I'm Feeling Lucky!</a>
-        </div>
+        <button class="lucky-button">I'm Feeling Lucky!</button>
+        {{!-- <a href="/login"></a> --}}
+        {{!-- </div> --}}
         {{/if}}
       </nav>
     </header>
-    <main class="">
+    <main class="body_content">
       <!-- Render the sub layout -->
       {{{ body }}}
     </main>
@@ -51,7 +52,7 @@
   {{/if}}
   {{!-- <script src="/js/login.js"></script> --}}
 
-
+  <script src="./js/login.js"></script>
 </body>
 
 </html>

@@ -3,7 +3,7 @@ const withAuth = require('../utils/auth');
 const { Project, User , Card } = require('../models');
 const path = require('path');
 const player = require('play-sound')();
-const { User , Card } = require('../models');
+// const { User , Card } = require('../models'); //threw an error saying User was already declared (line 4), commented out to get it to run -Matt
 // const { Game } = require('../utils/gameplay/blackjack');
 
 router.get('/', (req, res) => {
@@ -11,16 +11,16 @@ router.get('/', (req, res) => {
 });
 
 // Comment out this part to mute audio
-  const audioFilePath = path.join(__dirname, '../audio/Casino.mp3');
-  console.log('Audio file path:', audioFilePath); // Log the resolved file path
+  // const audioFilePath = path.join(__dirname, '../audio/Casino.mp3');
+  // console.log('Audio file path:', audioFilePath); // Log the resolved file path
 
-  player.play(audioFilePath, { afplay: ['-v', 1] }, function(err) {
-      if (err) {
-          console.error('Error playing audio:', err);
-      } else {
-          console.log('Audio file played successfully');
-      }
-  });
+  // player.play(audioFilePath, { afplay: ['-v', 1] }, function(err) {
+  //     if (err) {
+  //         console.error('Error playing audio:', err);
+  //     } else {
+  //         console.log('Audio file played successfully');
+  //     }
+  // });
 
  
  
