@@ -41,28 +41,22 @@
             <div class="chip_container">
                 <div class="menu">
 
-                    <div class="chip_count"><p>Bankroll: ${{user.chipCount}}</p></div>
-                    <button class="chips" id="chips_100" value="100"></button>
-                    <button class="chips" id="chips_500" value="500"></button>
-                    <button class="chips" id="chips_1000" value="1000"></button>
-                    <button class="chips" id="chips_2500" value="2500"></button>
-
                     <div class="chip_count">
-                        <p class="current_bankroll">Bankroll: $2,500</p>
+                        <p class="current_bankroll">Bankroll: {{user.chipCount}}</p>
                         <p class="current_wager">Current Wager: $500</p>
                     </div>
-                    <div class="chips" id="chips_100">
+                    <button class="chips" id="chips_100" value="100">
                         <img src="./images/chip_images/chip_100.png">
-                    </div>
-                    <div class="chips" id="chips_500">
+                    </button>
+                    <button class="chips" id="chips_500" value="500">
                         <img src="./images/chip_images/chip_500.png">
-                    </div>
-                    <div class="chips" id="chips_1000">
+                    </button>
+                    <button class="chips" id="chips_1000" value="1000">
                         <img src="./images/chip_images/chip_1000.png">
-                    </div>
-                    <div class="chips" id="chips_2500">
+                    </button>
+                    <button class="chips" id="chips_2500" value="2500">
                         <img src="./images/chip_images/chip_2500.png">
-                    </div>
+                    </button>
 
                 </div>
             </div>    
@@ -72,7 +66,7 @@
                         <div class="card" onclick="flipCard()">
                             <div class="card-inner">
                                 <div class="card-front">
-                                    <img src="./images/card_images/card_a_s.png">
+                                    <img src="./images/{{card.filename}}">
                                 </div>
                                 <div class="card-back">
                                     <img src="./images/card_images/card_card_back.png">
@@ -84,7 +78,7 @@
                         <div class="card" onclick="flipCard()">
                             <div class="card-inner">
                                 <div class="card-front">
-                                    <img src="./images/card_images/card_j_s.png">
+                                    <img src="./images/{{card.filename}}">
                                 </div>
                                 <div class="card-back">
                                     <img src="./images/card_images/card_card_back.png">
@@ -100,11 +94,6 @@
             <div class="bet_container">
 
                 <div class="menu">
-                    <button class="bet_btn" id="deal_btn">Deal</button>
-                    <button class="bet_btn" id="hit_btn">Hit</button>
-                    <button class="bet_btn" id="stay_btn">Stay</button>
-                    <button class="bet_btn" id="split_btn">Split</button>
-                    <button class="bet_btn" id="doubledn_btn">Double Down</button>
 
                 <div class="bet_menu">
                     <div class="bet_btn" id="deal_btn">
@@ -129,3 +118,4 @@
         </div>
     </div>
     <script src="./js/card_flip_script.js"></script>
+    <script src="./js/classic.js"></script>
