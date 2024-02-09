@@ -9,7 +9,15 @@
     top: 10%;
     width: 90%;
     height: 20%;
-    background-color: white;
+    background-color: #90DC49;
+    border-radius: 25px;
+    text-align: center;
+    
+}
+
+.chip_count p {
+    margin-block-start: .5em;
+    margin-block-end: .5em;
 }
 
 .chips{
@@ -18,9 +26,22 @@
     width: 6em;
     height: 6em;
     border-radius: 50%;
-    background-color: pink;
+    /* background-color: pink; */
     margin: 3%;
 }
+
+
+.chips img {
+    max-width: 100%;
+    max-height: 100%;
+
+    /* width: auto; */
+}
+
+.chips:hover {
+    transform: scale(1.1);
+  }
+
 
 #chips_100{
     

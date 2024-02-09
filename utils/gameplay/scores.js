@@ -1,3 +1,5 @@
+const User = require ('../../models/User');
+
 const calculateHandValue = (hand) => {
     let handValue = 0;
     hand.forEach((card) => {
@@ -52,4 +54,9 @@ const calculateNewBalance = (balance, bet, outcome) => {
     }
 };
 
-module.exports = { calculateHandValue, checkWinner, calculateNewBalance };
+const updatePlayerBalance = async (newBalance, userId) => {
+    await User.update({ chipCount: newBalance }, { where: { id: userId } });
+    this.playerBalance = newBalance;
+}
+
+module.exports = { calculateHandValue, checkWinner, calculateNewBalance, updatePlayerBalance };
