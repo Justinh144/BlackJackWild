@@ -150,7 +150,7 @@ router.post('/hit', async (req, res) => {
         const user = await User.findByPk(req.session.user_id);
         console.log('user at end of hit', user);
         console.log('hit route')
-        return res.status(200).json('success. /hit route hit');
+        return res.status(200).json({ playerBalance: playerBalance, playerBet: playerBet, playerHand: playerHand, splitHand1: splitHand1, splitHand2: splitHand2});
     } catch(err) {
         res.status(500).json({ error: `Failed to hit: ${err}`});
     }
@@ -211,7 +211,12 @@ router.post('/stay', async (req, res) => {
         console.log('user at end of stay', user);
 
         console.log('stay route')
-        return res.status(200).json('success. /stay route hit');
+        return res.status(200).json({playerBalance: req.session.gameState.playerBalance, 
+                                    playerBet: req.session.gameState.playerBet, 
+                                    playerHand: req.session.gameState.playerHand, 
+                                    splitHand1: req.session.gameState.splitHand1, 
+                                    splitHand2: req.session.gameState.splitHand2
+                                    });
     } catch(err) {
         res.status(500).json({ error: `Failed to stay: ${err}`});
     }
@@ -258,7 +263,10 @@ router.post('/split', (req, res) => {
         console.log('deck length after splitting', deck.length);
 
         console.log('split route')
-        return res.status(200).json('success. /split route hit');
+        return res.status(200).json({playerBet: req.session.gameState.playerBet, 
+                                    splitHand1: req.session.gameState.splitHand1, 
+                                    splitHand2: req.session.gameState.splitHand2
+                                });
     } catch(err) {
         res.status(500).json({ error: `Failed to split: ${err}`});
     }
@@ -289,7 +297,7 @@ router.post('/doubledn', (req, res) => {
         console.log('gamestate at end of doubledn', req.session.gameState);
 
         console.log('doubledn route')
-        return res.status(200).json('success. /doubledn route hit');
+        return res.status(200).json({ playerBet: req.session.gameState.playerBet });
     } catch(err) {
         res.status(500).json({ error: `Failed to doubledn: ${err}`});
     }
@@ -333,7 +341,11 @@ router.post('/deal', async (req, res) => {
         console.log('gamestate after dealing', req.session.gameState);
 
         console.log('deal route')
-        return res.status(200).json('success. /deal route hit');
+        return res.status(200).json({playerBalance: req.session.gameState.playerBalance, 
+                                    playerBet: req.session.gameState.playerBet, 
+                                    playerHand: req.session.gameState.playerHand, 
+                                    computerHand: req.session.gameState.computerHand
+                                });
     } catch(err) {
         res.status(500).json({ error: `Failed to deal: ${err}`});
     }
@@ -343,12 +355,14 @@ router.post('/deal', async (req, res) => {
 router.post('/bet', async (req, res) => {
     try{
         const { placedBet } = req.body;
+        let playerBet = req.session.gameState.playerBet;
         if (placedBet < req.session.gameState.playerBalance) {
-            req.session.gameState.playerBet += placedBet;
+            playerBet += placedBet;
         }
         console.log('gamestate after placing bet',req.session.gameState);
 
-        return res.status(200).json(`Success user bets: $${req.session.gameState.playerBet}`)
+        req.session.gameState.playerBet = playerBet;
+        return res.status(200).json({playerBet: req.session.gameState.playerBet});
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: `Failed posting bet: ${err}`});
@@ -365,12 +379,12 @@ router.post('/togglehand', async (req, res) => {
             req.session.gameState.isUserSplitHand1 = !req.session.gameState.isUserSplitHand1;
         }
 
-        console.log('Toggled to', req.session.gameState.isUserSplitHand1 ? 'first split hand' : 'second split hand');
-        console.log('gamestate after toggling:', req.session.gameState);
+        // console.log('Toggled to', req.session.gameState.isUserSplitHand1 ? 'first split hand' : 'second split hand');
+        // console.log('gamestate after toggling:', req.session.gameState);
 
-        const toggledHand = req.session.gameState.isUserSplitHand1 ? 'first split hand' : 'second split hand';
+        const toggledHand = req.session.gameState.isUserSplitHand1 ? 'splitHand1' : 'splitHand2';
 
-        res.status(200).json({ success: true, message: `Successfully toggled to ${toggledHand}`});
+        res.status(200).json({ success: true, toggledHand: toggledHand});
 
     } catch(err) {
         res.status(500).json({ success: false, error: `Failed to toggle hand: ${err}`});

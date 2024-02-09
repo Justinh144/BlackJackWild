@@ -118,7 +118,7 @@ const sendDecision = async (decision) => {
             body: JSON.stringify({ decision, currentHand }),
         });
         const data = await response.json();
-        console.log(data);
+        console.log('res object after hitting', data);
 
     } catch (error) {
         console.error("Error:", error);
@@ -134,7 +134,7 @@ const toggleHand = async () => {
             },
         });
         const data = await response.json();
-        console.log(data);
+        console.log('data after toggling hand',data);
 
         if (data.success) {
             console.log(data.message);
