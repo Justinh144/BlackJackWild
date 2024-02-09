@@ -1,8 +1,8 @@
-const splitBtn = document.querySelector('#split_btn');
-const hitBtn = document.querySelector('#hit_btn');
-const dealBtn = document.querySelector('#deal_btn');
-const doublednBtn = document.querySelector('#doubledn_btn');
-const stayBtn = document.querySelector('#stay_btn');
+const splitBtn = document.querySelector('#split_button');
+const hitBtn = document.querySelector('#hit_button');
+const dealBtn = document.querySelector('#deal_button');
+const doublednBtn = document.querySelector('#doubledn_button');
+const stayBtn = document.querySelector('#stay_button');
 const chipBtns = document.getElementsByClassName('chips');
 
 let currentHand = 'splitHand1';
