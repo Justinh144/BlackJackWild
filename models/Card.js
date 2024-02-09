@@ -11,7 +11,7 @@ Card.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    cardName: {
+    cardname: {
       type: DataTypes.STRING,
       allowNull: false,
     },

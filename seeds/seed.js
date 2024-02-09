@@ -23,7 +23,7 @@ const seedDeck = async () => {
     for (const suit of suits) {
       for (const value of values) {
         const cardName = `${value} of ${suit}`;
-        const filename = 'filename'; // You can replace this with actual file names if needed
+        const filename = `card_${value}_${suit}`; // You can replace this with actual file names if needed
 
         const card = {
           cardName,
@@ -46,6 +46,7 @@ const seedDeck = async () => {
 
 const seedDatabase = async () => {
   await sequelize.sync({ force: true });
+
 
   const users = await User.bulkCreate(userData, {
     individualHooks: true,
