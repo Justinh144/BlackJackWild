@@ -1,61 +1,62 @@
-const readlineSync = require('readline-sync');
-const { calculateHandValue, checkWinner } = require('./scores');
-const { createDeck, deal } = require('./deck_handler');
-const { bet, getUserDecision, drawComputerCard } = require('./actions');
+const { Game } = require('./test');
+async function startGame(userId, playerBalance, betAmount) {
+    try {
 
-const inBank = 10000;
+        const game = new Game(userId);
 
-const playGame = async () => {
-    const newDeck = await createDeck();
-    let playerBalance = inBank;
+        await game.initialize();
+        console.log("Game initialized.");
 
-    while (true) {
-        const playerBet = bet(playerBalance);
+        console.log(`Placing a bet of ${betAmount}...`);
+        await game.bet(game.playerBalance, betAmount);
+        console.log("Bet placed.");
 
-        if (playerBet !== false) {
-            let playerHand = deal(newDeck, 2);
-            let computerHand = deal(newDeck, 2);
+        // Deal initial cards
+        console.log("Dealing cards...");
+        await game.deal();
+        console.log("Cards dealt.");
 
-            console.log(`Player's hand`, playerHand);
-            console.log(`Computer's hand`, computerHand);
+        // Display player and dealer hands
+        console.log("Player's Hand:", game.playerHand);
+        console.log("Dealer's Hand:", game.computerHand);
 
-            // User's turn
-            let decision = getUserDecision();
-            while (decision === 'Hit') {
-                playerHand.push(newDeck.pop()); // Draw a card
-                console.log('Player\'s hand:', playerHand);
-
-                if (calculateHandValue(playerHand) > 21) {
-                    console.log('Bust! You went over 21.');
-                    checkWinner(playerHand, computerHand);
-                    break;
+        let playerBust = false;
+        while (!playerBust) {
+            // Simulate player's decision (hit or stay)
+            const playerDecision = Math.random() < 0.5 ? 'hit' : 'stay';
+            if (playerDecision === 'hit') {
+                console.log("Player decides to hit.");
+                playerBust = await game.hit();
+                console.log("Player's Hand:", game.playerHand);
+                if (playerBust) {
+                    console.log("Player busts!");
                 }
-
-                decision = getUserDecision();
+            } else {
+                console.log("Player decides to stay.");
+                break;
             }
-
-            // Computer's turn
-            console.log('Computer\'s turn:');
-            console.log('Computer\'s hand:', computerHand);
-
-            while (calculateHandValue(computerHand) < 17) {
-                drawComputerCard(newDeck, computerHand);
-            }
-
-            checkWinner(playerHand, computerHand);
-
-        } else {
-            console.log('Exiting the game due to insufficient balance.');
-            break;
         }
 
-        // Ask if the player wants to play another round
-        const playAgain = readlineSync.keyInYNStrict('Do you want to play another round?');
-        if (!playAgain) {
-            console.log('Exiting the game. Thank you for playing!');
-            break;
+        // If player hasn't busted, it's the dealer's turn
+        if (!playerBust) {
+            await game.dealerTurn();
+            console.log("Dealer's Hand:", game.computerHand);
         }
+
+        // Compare hands and determine the winner
+        console.log("Comparing hands...");
+        // await game.compareHands(); // Implement this method in your Game class
+
+        // End the game
+        // await game.endGame(); // Implement this method in your Game class
+    } catch (error) {
+        console.error("Error starting the game:", error);
     }
-};
+}
 
-playGame();
+// Example usage:
+const userId = 5;
+const playerBalance = 1000;
+const betAmount = 50;
+
+startGame(userId, playerBalance, betAmount);
