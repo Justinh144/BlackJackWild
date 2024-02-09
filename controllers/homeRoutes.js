@@ -1,11 +1,31 @@
 const router = require('express').Router();
 const withAuth = require('../utils/auth');
+const { Project, User , Card } = require('../models');
+const path = require('path');
+const player = require('play-sound')();
 const { User , Card } = require('../models');
 // const { Game } = require('../utils/gameplay/blackjack');
 
 router.get('/', (req, res) => {
      res.render('homepage');
 });
+
+// Comment out this part to mute audio
+  const audioFilePath = path.join(__dirname, '../audio/Casino.mp3');
+  console.log('Audio file path:', audioFilePath); // Log the resolved file path
+
+  player.play(audioFilePath, { afplay: ['-v', 1] }, function(err) {
+      if (err) {
+          console.error('Error playing audio:', err);
+      } else {
+          console.log('Audio file played successfully');
+      }
+  });
+
+ 
+ 
+  
+  // Comment out this part to mute audio
 
 router.get('/login', (req, res) => {
      // If the user is already logged in, redirect the request to another route
