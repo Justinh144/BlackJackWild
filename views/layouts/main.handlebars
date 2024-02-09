@@ -6,25 +6,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Black Jack Wild!</title>
   {{!-- <link rel="stylesheet" href="/css/jass.css"> --}}
+  {{!-- <link rel="stylesheet" href="/css/jass.css"> --}}
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/style2.css">
   <link rel="stylesheet" href="./css/chip_style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Open+Sans:ital,wght@0,400;0,800;1,800&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <div class="">
-    <header class="">
-      <h1>
-        <span role="img" aria-label="card"> 🂡 </span>
-        <a href="/">Black Jack Wild</a>
-        <span role="img" aria-label="card"> 🂡 </span>
-      </h1>
+  <div class="container">
+    <header class="header">
+      {{!-- <h1>
+        <a href="/" class="BJW">Black Jack Wild</a>
+      </h1> --}}
+      <img class="header_logo" src="./images/table_images/tablegraphics_middle.png">
       <nav>
         <!-- Conditionally render login or logout links -->
         {{#if logged_in}}
-        <a href="/profile">profile</a> |
-        <button class="no-button" id="logout">logout</button>
+        <a href="/profile" class="profile-button">Profile</a> |
+        <button class="no-button logout-button" id="logout">Logout</button>
+       </div class="container">
         {{else}}
-        <a href="/login">login</a>
+        
+        <a href="/login" class="lucky-button">I'm Feeling Lucky!</a>
+        </div>
         {{/if}}
       </nav>
     </header>
@@ -35,6 +42,7 @@
     <footer>
       
     </footer>
+  
   </div>
 
   <!-- Render script for logged in users only -->
@@ -42,6 +50,8 @@
   <script src="/js/logout.js"></script>
   {{/if}}
   {{!-- <script src="/js/login.js"></script> --}}
+
+
 </body>
 
 </html>

@@ -21,8 +21,12 @@
             </div>
             <div class="dealer_container">
                 <div class="dealer_center">
-                    <div class="dealer_card" id="dealer_card_1"></div>
-                    <div class="dealer_card" id="dealer_card_2"></div>
+                    <div class="dealer_card" id="dealer_card_1">
+                        <img id="compCard1">
+                    </div>
+                    <div class="dealer_card" id="dealer_card_2">
+                        <img id="compCard2">
+                    </div>
                     <div class="dealer_card" id="dealer_card_3"></div>
                     <div class="dealer_card" id="dealer_card_4"></div>
                     <div class="dealer_card" id="dealer_card_5"></div>
@@ -43,7 +47,7 @@
 
                     <div class="chip_count">
                         <p class="current_bankroll">Bankroll: ${{user.chipCount}}</p>
-                        <p class="current_wager">Current Wager: $500</p>
+                        <p class="current_wager">Current Wager: $0</p>
                     </div>
                     <button class="chips" id="chips_100" value="100">
                         <img src="./images/chip_images/chip_100.png">
@@ -65,7 +69,7 @@
                         <div class="card" onclick="flipCard()">
                             <div class="card-inner">
                                 <div class="card-front">
-                                    <img src="./images/card_images/card_a_s.png">
+                                    <img id="card1">
                                 </div>
                                 <div class="card-back">
                                     <img src="./images/card_images/card_card_back.png">
@@ -77,7 +81,7 @@
                         <div class="card" onclick="flipCard()">
                             <div class="card-inner">
                                 <div class="card-front">
-                                    <img src="./images/card_images/card_j_s.png">
+                                    <img id="card2">
                                 </div>
                                 <div class="card-back">
                                     <img src="./images/card_images/card_card_back.png">
@@ -85,8 +89,30 @@
                             </div>
                         </div>
                     </div>
-                    <div class="player_card" id="player_card_3"></div>
-                    <div class="player_card" id="player_card_4"></div>
+                    <div class="player_card" id="player_card_3">
+                        <div class="card" onclick="flipCard()">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img id="card3">
+                                </div>
+                                <div class="card-back">
+                                    <img src="./images/card_images/card_card_back.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="player_card" id="player_card_4">
+                        <div class="card" onclick="flipCard()">
+                            <div class="card-inner">
+                                <div class="card-front">
+                                    <img id="card4">
+                                </div>
+                                <div class="card-back">
+                                    <img src="./images/card_images/card_card_back.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="player_card" id="player_card_5"></div>
                 </div>  
             </div>
