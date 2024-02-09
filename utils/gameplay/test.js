@@ -28,7 +28,9 @@ class Game {
     async createDeck() {
         try{
             const allcards = await Card.findAll({
-                attributes: ['value', 'cardname', 'filename'],
+
+                attributes: ['value', 'cardName', 'filename'],
+
             });
             // console.log(allcards)
             const formattedCards = allcards.map((card) => card.get({ plain: true }));
