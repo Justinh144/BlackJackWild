@@ -1,8 +1,7 @@
 const sequelize = require('../config/connection');
-const { User, Project, Card } = require('../models');
+const { User, Card } = require('../models');
 
 const userData = require('./userData.json');
-const projectData = require('./projectData.json');
 
 const getValue = (card) => {
   if (card === 'Jack' || card === 'Queen' || card === 'King') {
@@ -23,11 +22,11 @@ const seedDeck = async () => {
 
     for (const suit of suits) {
       for (const value of values) {
-        const cardName = `${value} of ${suit}`;
-        const filename = 'filename'; // You can replace this with actual file names if needed
+        const cardname = `${value} of ${suit}`;
+        const filename = `card_${value}_${suit}.png`; // You can replace this with actual file names if needed
 
         const card = {
-          cardName,
+          cardname,
           filename,
           value: getValue(value),
           suit,
@@ -48,17 +47,11 @@ const seedDeck = async () => {
 const seedDatabase = async () => {
   await sequelize.sync({ force: true });
 
+
   const users = await User.bulkCreate(userData, {
     individualHooks: true,
     returning: true,
   });
-
-  for (const project of projectData) {
-    await Project.create({
-      ...project,
-      user_id: users[Math.floor(Math.random() * users.length)].id,
-    });
-  }
 
   await seedDeck();
   process.exit(0);

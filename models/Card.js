@@ -11,7 +11,7 @@ Card.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    cardName: {
+    cardname: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -32,6 +32,7 @@ Card.init(
     sequelize,
     freezeTableName: true,
     underscored: true,
+    timestamps: false,
     modelName: "card",
   }
 );
