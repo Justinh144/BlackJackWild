@@ -6,16 +6,16 @@
                         <button class="button" id="home_button"><h3>Home</h3></button>
                     </div>
                     <div class="menu_btn" id="account_btn">
-                        <button class="button" id="home_button"><h3>Account</h3></button>
+                        <button class="button" id="account_button"><h3>Account</h3></button>
                     </div>
                     <div class="menu_btn" id="deck_btn">
-                        <button class="button" id="home_button"><h3>Custom Deck</h3></button>
+                        <button class="button" id="custom_deck_button"><h3>Custom Deck</h3></button>
                     </div>
                     <div class="menu_btn" id="reload_chips_btn">
-                        <button class="button" id="home_button"><h3>Reload Chips</h3></button>
+                        <button class="button" id="reload_button"><h3>Reload Chips</h3></button>
                     </div>
                     <div class="menu_btn" id="log_out_btn">
-                        <button class="button" id="home_button"><h3>Log Out</h3></button>
+                        <button class="button" id="log_out_button"><h3>Log Out</h3></button>
                     </div>
                 </div>
             </div>
@@ -49,18 +49,21 @@
                         <p class="current_bankroll">Bankroll: ${{user.chipCount}}</p>
                         <p class="current_wager">Current Wager: $0</p>
                     </div>
-                    <button class="chips" id="chips_100" value="100">
-                        <img src="./images/chip_images/chip_100.png">
-                    <button class="chips" id="chips_500" value="500">
-                        <img src="./images/chip_images/chip_500.png">
+                    <div class="chip_img_container">
+                        <button class="chips" id="chips_100" value="100">
+                            <img src="./images/chip_images/chip_100.png">
+                            </button>
+                        <button class="chips" id="chips_500" value="500">
+                            <img src="./images/chip_images/chip_500.png">
+                            </button>
+                        {{!-- </div> --}}
+                        <button class="chips" id="chips_1000" value="1000">
+                            <img src="./images/chip_images/chip_1000.png">
+                            </button>
+                        <button class="chips" id="chips_2500" value="2500">
+                            <img src="./images/chip_images/chip_2500.png">
+                            </button>
                     </div>
-                    <button class="chips" id="chips_1000" value="1000">
-                        <img src="./images/chip_images/chip_1000.png">
-                    </button>
-                    <button class="chips" id="chips_2500" value="2500">
-                        <img src="./images/chip_images/chip_2500.png">
-                    </button>
-
                 </div>
             </div>    
             <div class="player_container">
