@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const withAuth = require('../utils/auth');
-// const { Project, User , Card } = require('../models');
+const { Project, User , Card } = require('../models');
 const path = require('path');
 const player = require('play-sound')();
 // const { User , Card } = require('../models'); //threw an error saying User was already declared (line 4), commented out to get it to run -Matt
