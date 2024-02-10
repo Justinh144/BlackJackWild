@@ -176,8 +176,8 @@ const hit = async () => {
             if (data.message === 'You Busted!') {
                 hideCard.removeAttribute('src');
                 loss(data.message);
-            } else if (data.message === 'blackjack') {
-                blackJack();
+            } else if (data.message === 'Blackjack!') {
+                blackJack(data.message);
             }
         }
 
@@ -214,7 +214,7 @@ const deal = async () => {
     
     
             if (calcHandValue(data.gameState.playerHand) === 21) {
-                blackJack();
+                blackJack('Blackjack!');
             }
         }
 
@@ -353,7 +353,9 @@ const drawComputerCard = async () => {
             computerTotal = calcHandValue(data.gameState.computerHand);
             console.log(playerTotal);
             console.log(computerTotal);
-            if (playerTotal > computerTotal) {
+            if(computerTotal > 21) {
+                computerBust();
+            } else if (playerTotal > computerTotal) {
                 win('You Win!');
             } else if (playerTotal === computerTotal) {
                 push('Push');
@@ -428,7 +430,7 @@ const computerBust = async () => {
         const data = await response.json();
         console.log(data);
         // console.log(data.gameState.playerBalance);
-        win('Computer Busts!');
+        win('Opponent Busts!');
 
     } catch (error) {
         console.error("Error:", error);

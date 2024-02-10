@@ -191,9 +191,9 @@ router.post('/stay', async (req, res) => {
         // if (calcHandValue(computerHand) > 21) {
         //     stayMessage = 'Dealer bust';
         // } else 
-        if (calcHandValue(computerHand) >= 16) {
+        if (calcHandValue(computerHand) >= 17) {
             stayMessage = 'Dealer stay';
-        } else if (calcHandValue(computerHand) < 16) {
+        } else {
             stayMessage = 'Dealer hit';
         }
 
