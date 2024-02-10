@@ -68,9 +68,10 @@ const loginFormHandler = async (event) => {
     .querySelector('.signup-form')
     .addEventListener('submit', signupFormHandler);
 
-    const luckyBtn = document.querySelector('.lucky-button');
+//     const luckyBtn = document.getElementById('.lucky-button');
 
-luckyBtn.addEventListener('click', () => {
-  window.location.replace('/login');
+// luckyBtn.addEventListener('click', (event) => {
+//   event.preventDefault();
+//   window.location.replace('/login');
 
-});
+// });
