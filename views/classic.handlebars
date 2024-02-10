@@ -3,7 +3,9 @@
             <div class="menu_container">
                 <div class="main_menu">
                     <div class="menu_btn" id="home_btn">
+                        <a href="/profile" class="button">
                         <button class="button" id="home_button"><h3>Home</h3></button>
+                        </a>
                     </div>
                     <div class="menu_btn" id="account_btn">
                         <button class="button" id="account_button"><h3>Account</h3></button>
@@ -15,7 +17,9 @@
                         <button class="button" id="reload_button"><h3>Reload Chips</h3></button>
                     </div>
                     <div class="menu_btn" id="log_out_btn">
+                        <a href="/" class="button">
                         <button class="button" id="log_out_button"><h3>Log Out</h3></button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -109,8 +113,8 @@
                 <div class="menu">
 
                     <div class="chip_count">
-                        <p class="current_bankroll">Bankroll: ${{user.chipCount}}</p>
-                        <p class="current_wager">Current Wager: $0</p>
+                        <p class="current_bankroll roboto">Bankroll: ${{user.chipCount}}</p>
+                        <p class="current_wager roboto">Current Wager: $0</p>
                     </div>
                     <div class="chip_img_container">
                         <button class="chips" id="chips_100" value="100">
@@ -221,5 +225,20 @@
             </div>
         </div>
     </div>
+
+  {{!-- <audio controls autoplay>
+    <source src="../../audio/casino.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio> --}}
+
+    </div>
+    <div>
+    <audio controls autoplay>
+    <source src="../../audio/casino.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+    </div>
+
     <script src="./js/card_flip_script.js"></script>
     <script src="./js/classic.js"></script>

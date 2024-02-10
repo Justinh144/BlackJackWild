@@ -7,10 +7,19 @@ const player = require('play-sound')();
 // const { Game } = require('../utils/gameplay/blackjack');
 
 router.get('/', (req, res) => {
-     res.render('homepage');
+  res.render('homepage');
+});
+
+router.get('/casino.mp3', (req, res) => {
+  res.sendFile('../../audio/casino.mp3', {
+    headers: {
+      'Content-Type': 'audio/mpeg',
+    },
+  });
 });
 
 // Comment out this part to mute audio
+
   // const audioFilePath = path.join(__dirname, '../audio/Casino.mp3');
   // console.log('Audio file path:', audioFilePath); // Log the resolved file path
 
@@ -22,9 +31,6 @@ router.get('/', (req, res) => {
   //     }
   // });
 
- 
- 
-  
   // Comment out this part to mute audio
 
 router.get('/login', (req, res) => {

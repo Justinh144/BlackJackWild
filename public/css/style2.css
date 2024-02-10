@@ -59,7 +59,7 @@ body {
     padding: 10px 20px; /* Padding around the text */
     border-radius: 5px; /* Rounded corners */
     text-decoration: none; /* Remove underline */
-    font-size: 50px;
+    font-size: 30px;
     font-family: 'Dancing Script', cursive;
    }
 
@@ -70,7 +70,7 @@ body {
     padding: 10px 20px; /* Padding around the text */
     border-radius: 5px; /* Rounded corners */
     text-decoration: none; /* Remove underline */
-    font-size: 50px;
+    font-size: 30px;
     font-family: 'Dancing Script', cursive;
    }
 
@@ -177,13 +177,20 @@ body {
 
 
     .profile_text{
-      size: 8em;
+      font-size: 50px;
+      font-family: 'Dancing Script', cursive;
+    }
+
+    
+    .profile_text{
+      font-size: 30px;
       font-family: 'Dancing Script', cursive;
     }
 
     .profile_text p {
       size: 8em;
       font-family: 'Dancing Script', cursive;
+      text-align: center;
     }
 
     .body_content{
@@ -194,4 +201,12 @@ body {
 
     h2 {
       margin: 1%;
+    }
+
+    audio {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: -1; /* Ensure the audio player is behind other content */
     }

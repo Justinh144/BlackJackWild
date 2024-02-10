@@ -66,3 +66,8 @@ button.chips {
 #chips_2500{
     
 }
+
+.roboto {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+}
