@@ -98,6 +98,9 @@ const initializeGameUI = () => {
                     case 'x':
                         doubleDn();
                         break;
+                    case 't':
+                        split();
+                        break;
                     case 'b': 
                         sendBet(100);
                         break;
