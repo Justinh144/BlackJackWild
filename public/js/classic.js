@@ -10,8 +10,13 @@ const playerCard1 = document.querySelector('#card1');
 const playerCard2 = document.querySelector('#card2');
 const playerCard3 = document.querySelector('#card3');
 const playerCard4 = document.querySelector('#card4');
+const playerCard5 = document.querySelector('#card5');
 const compCard1 = document.querySelector('#compCard1');
 const compCard2 = document.querySelector('#compCard2');
+const compCard3 = document.querySelector('#compCard3');
+const compCard4 = document.querySelector('#compCard4');
+const compCard5 = document.querySelector('#compCard5');
+
 const bankRoll = document.querySelector('.current_bankroll');
 
 const calcHandValue = (hand) => {
@@ -109,9 +114,15 @@ const hit = async () => {
         console.log(data);
         console.log(data.gameState.playerHand.length)
 
-        if (data.gameState.playerHand.length !== 2) {
-            console.log('newplayercard',data.gameState.playerHand[data.gameState.playerHand.length-1]);
-            playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[data.gameState.playerHand.length-1].filename);
+        if (data.gameState.playerHand.length === 3) {
+            console.log('newplayercard',data.gameState.playerHand[2]);
+            playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[2].filename);
+        } else if (data.gameState.playerHand.length === 4) {
+            console.log('newplayercard',data.gameState.playerHand[3]);
+            playerCard4.setAttribute('src', './images/card_images/' + data.gameState.playerHand[3].filename);
+        } else if (data.gameState.playerHand.length === 5) {
+            console.log('newplayercard',data.gameState.playerHand[4]);
+            playerCard5.setAttribute('src', './images/card_images/' + data.gameState.playerHand[4].filename);
         } 
         if (data.message === 'bust') {
             await bust();
@@ -259,6 +270,11 @@ const stay = async () => {
         const data = await response.json();
         console.log(data);
 
+        if (data.gameState.computerHand.length === 3) {
+            compCard3.setAttribute('src', './images/card_images/' + data.gameState.computerHand[2].filename)
+        }
+
+
         let playerTotal = 0;
         let computerTotal = 0;
         if (data.stayMessage === 'Dealer bust') {
@@ -318,6 +334,8 @@ const win = async () => {
 
         currentWager.textContent = 'Current Wager: $0';
         bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
+
+        
 
         playerCard1.removeAttribute('src');
         playerCard2.removeAttribute('src');

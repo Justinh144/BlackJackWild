@@ -49,9 +49,10 @@ router.post('/hit', async (req, res) => {
         if (playerBet === null || playerBet === undefined || playerBet === 0) {
             return res.status(400).json({ error: 'Please place a bet first' });
         }
-        if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21) {
+        if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21 || playerHand.length > 5) {
             return res.status(400).json({ error: 'You cannot hit again!'});
         }
+
 
         if (split) {
             if ((splitHand1.length === null || splitHand1.length === undefined || splitHand1.length === 0)&&
@@ -117,6 +118,9 @@ router.post('/hit', async (req, res) => {
             }
 
         } else {
+            if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21 || playerHand.length > 5) {
+                return res.status(400).json({ error: 'You cannot hit again!'});
+            }
 
             if (playerHand.length === null || playerHand.length === undefined || playerHand.length === 0) {
                 return res.status(400).json({ error: 'You must deal cards!' });

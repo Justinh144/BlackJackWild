@@ -7,8 +7,6 @@ class Game {
         this.userId = userId;
         this.playerBalance = 0;
     }
-
-    // creates deck if one does not exist, shuffles and returns the deck
     async initialize() {
         try {
             if (!this.deck) {
