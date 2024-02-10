@@ -80,18 +80,48 @@ const initializeGameUI = () => {
         });
         hideCard.removeAttribute('src');
         document.addEventListener('keypress', async (event) => {
-            try {
-                if (event.key === ' ') {
-                    event.preventDefault();
-                    // console.log('keypress');
-                    await toggleHand();
-                } else {
-                    console.log('no split occurred');
+            try{
+                switch(event.key) {
+                    case ' ':
+                        event.preventDefault();
+                        await toggleHand();
+                        break;
+                    case 's':
+                        stay();
+                        break;
+                    case 'h':
+                        hit();
+                        break;
+                    case 'd':
+                        deal();
+                        break;
+                    case 'x':
+                        doubleDn();
+                        break;
+                    case 'b': 
+                        sendBet(100);
+                        break;
+                    default:
+                        console.log('Invalid key press');
                 }
-            } catch (err) {
-                console.error('Error toggling hand:', err);
+
+            } catch (error) {
+                console.error(error);
             }
         });
+        // document.addEventListener('keypress', async (event) => {
+        //     try {
+        //         if (event.key === ' ') {
+        //             event.preventDefault();
+        //             // console.log('keypress');
+        //             await toggleHand();
+        //         } else {
+        //             console.log('no split occurred');
+        //         }
+        //     } catch (err) {
+        //         console.error('Error toggling hand:', err);
+        //     }
+        // });
 
 
     } catch (err) {
@@ -312,7 +342,7 @@ const drawComputerCard = async () => {
 
         let playerTotal;
         let computerTotal;
-        if (calcHandValue(data.gameState.computerHand) < 16){
+        if (calcHandValue(data.gameState.computerHand) < 17){
             drawComputerCard();
         } else {
             hideCard.removeAttribute('src');
@@ -324,7 +354,7 @@ const drawComputerCard = async () => {
                 win('You Win!');
             } else if (playerTotal === computerTotal) {
                 push('Push');
-            } else if (playerTotal < computerTotal) {
+            } else if (playerTotal < computerTotal && computerTotal <= 21) {
                 loss('You Lost!');
             }
         }
@@ -353,9 +383,8 @@ const stay = async () => {
                 const compCardSlot = document.getElementById(`compCard${index + 1}`);
                 compCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
             });
-    
+        
             hideCard.removeAttribute('src');
-    
     
             let playerTotal = 0;
             let computerTotal = 0;
