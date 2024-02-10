@@ -314,7 +314,6 @@ const win = async () => {
         });
         const data = await response.json();
         console.log(data);
-        // console.log(data.gameState.playerBalance);
 
         currentWager.textContent = 'Current Wager: $0';
         bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
@@ -324,6 +323,7 @@ const win = async () => {
         playerCard3.removeAttribute('src');
         playerCard4.removeAttribute('src');
 
+        updatePlayerWins(); // Call to update player's win count
     } catch (error) {
         console.error("Error:", error);
     }
@@ -408,5 +408,21 @@ const blackJack = async () => {
 
     } catch (error) {
         console.error("Error:", error);
+    }
+};
+
+const updatePlayerWins = async () => {
+    try {
+        const response = await fetch("/api/classic/wins", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error("Error updating player wins:", error);
     }
 };

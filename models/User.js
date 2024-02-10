@@ -40,6 +40,11 @@ User.init(
       allowNull: false,
       defaultValue: 20000,
     },
+    handsWon: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    }
   },
   {
     hooks: {

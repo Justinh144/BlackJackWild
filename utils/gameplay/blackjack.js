@@ -1,5 +1,5 @@
 const readlineSync = require('readline-sync');
-const { checkWinner, calculateNewBalance } = require('./scores');
+const { checkWinner, calculateNewBalance, } = require('./scores');
 const { createDeck, deal } = require('./deck_handler');
 const { bet, getUserDecision, drawComputerCard } = require('./actions');
 const { User } = require('../../models');
@@ -59,6 +59,10 @@ class Game {
                 }
     
                 let outcome = checkWinner(playerHand, computerHand);
+
+                if (outcome === 'player') {
+                    await this.updateHandsWon(this.userId);
+                }
     
                 const newBalance = calculateNewBalance(this.playerBalance, playerBet, outcome);
                 await this.updatePlayerBalance(newBalance);
@@ -74,6 +78,14 @@ class Game {
     async updatePlayerBalance(newBalance) {
         await User.update({ chipCount: newBalance }, { where: { id: this.userId } });
         this.playerBalance = newBalance;
+    }
+
+    async updateHandsWon() {
+        const user = await User.findByPk(this.userId);
+        if (user) {
+            const newHandsWon = (user.handsWon || 0) + 1;
+            await User.update({ handsWon: newHandsWon }, { where: { id: this.userId } });
+        }
     }
 
     async askPlayAgain() {
