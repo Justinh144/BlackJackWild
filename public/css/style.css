@@ -274,7 +274,7 @@ body {
     width: 80%;
     padding: .1em;
     margin: .1em auto;
-
+    text-align: center;
 }
 
 .button:hover {
