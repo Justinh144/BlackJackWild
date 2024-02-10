@@ -83,8 +83,62 @@ body {
     position: relative;
     justify-content: center;
     width: 50%;
+    height: auto;
     margin: 0 auto;
 }
+
+.dealer_center{
+
+}
+
+.dealer_card {
+    position: relative;
+    top: 1em;
+    /* left: -2em; */
+    /* border: 1px;
+    border-color: black;
+    border-style: solid; */
+    width: 8em;
+    height: 12em;
+    margin: 0 auto;
+}
+
+#dealer_card_1{
+    border: .25em solid rgba(255,255,255,.9);
+    border-radius: 1.25em;
+    z-index: 1;
+}
+#hide_dealer_hole_card{
+    z-index: 2;
+    top: -11em;
+    /* left: 1em; */
+}
+#dealer_card_2{
+    top: -22em;
+    left: 1.5em;
+    /* border: .25em solid rgba(255,255,255,.9);
+    border-radius: 1.25em; */
+    z-index: 3;
+}
+#dealer_card_3{
+    top: -33em;
+    left: 3em;
+    /* background-color: blue; */
+    z-index: 4;
+}
+#dealer_card_4{
+    top: -44em;
+    left: 4.5em;
+    /* background-color: green; */
+    z-index: 5;
+}
+#dealer_card_5{
+    top: -55em;
+    left: 6em;
+    /* background-color: yellow; */
+    z-index: 6;
+}
+
 
 .deck_container {
     /* background-color: orange; */
@@ -112,23 +166,23 @@ body {
 
 /* ----------- */
 
-.dealer_card {
+/* .dealer_card {
     position: relative;
     top: 1em;
     /* left: -2em; */
     /* border: 1px;
     border-color: black;
     border-style: solid; */
-    width: 8em;
+    /* width: 8em;
     height: 12em;
     margin: 0 auto;
-}
+}  */
 
-#dealer_card_1{
+/* #dealer_card_1{
     /* border: .25em solid rgba(255,255,255,.9);
     border-radius: 1.25em; */
-    z-index: 1;
-}
+    /* z-index: 1;
+}  */
 
 /* ******************************************* */
 
