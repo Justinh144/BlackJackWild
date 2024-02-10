@@ -59,4 +59,17 @@ const updatePlayerBalance = async (newBalance, userId) => {
     this.playerBalance = newBalance;
 }
 
-module.exports = { calculateHandValue, checkWinner, calculateNewBalance, updatePlayerBalance };
+const updateHandsWon = async (userId) => {
+    try {
+        const user = await User.findByPk(userId);
+        if (user) {
+            const newHandsWon = (user.handsWon || 0) + 1;
+            await User.update({ handsWon: newHandsWon }, { where: { id: userId } });
+        }
+    } catch (error) {
+        console.error(`Error updating hands won: ${error}`);
+    }
+}
+
+
+module.exports = { calculateHandValue, checkWinner, calculateNewBalance, updatePlayerBalance, updateHandsWon};
