@@ -11,16 +11,16 @@ router.get('/', (req, res) => {
 });
 
 // Comment out this part to mute audio
-  // const audioFilePath = path.join(__dirname, '../audio/Casino.mp3');
-  // console.log('Audio file path:', audioFilePath); // Log the resolved file path
+  const audioFilePath = path.join(__dirname, '../audio/Casino.mp3');
+  console.log('Audio file path:', audioFilePath); // Log the resolved file path
 
-  // player.play(audioFilePath, { afplay: ['-v', 1] }, function(err) {
-  //     if (err) {
-  //         console.error('Error playing audio:', err);
-  //     } else {
-  //         console.log('Audio file played successfully');
-  //     }
-  // });
+  player.play(audioFilePath, { afplay: ['-v', 1] }, function(err) {
+      if (err) {
+          console.error('Error playing audio:', err);
+      } else {
+          console.log('Audio file played successfully');
+      }
+  });
 
  
  

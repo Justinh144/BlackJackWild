@@ -42,7 +42,7 @@ body {
     padding: .25em .25em; /* Padding around the text */
     border-radius: .5em; /* Rounded corners */
     text-decoration: none; /* Remove underline */
-    font-size: 1.5em;
+    font-size: 50px;
     font-family: 'Dancing Script', cursive;
     transition: transform 0.3s ease;
    }
@@ -175,14 +175,15 @@ body {
     align-items: center;
     text-align: center; */
 
-
-    .profile_text{
-      size: 8em;
+    .profileText1  {
+      font-size: 70px;
       font-family: 'Dancing Script', cursive;
     }
+  
 
-    .profile_text p {
-      size: 8em;
+    .profileText  {
+      font-size: 30px;
+      text-align: center;
       font-family: 'Dancing Script', cursive;
     }
 
