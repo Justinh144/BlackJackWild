@@ -46,7 +46,7 @@ const initializeGameUI = () => {
             deal();
         });
         doublednBtn.addEventListener('click', () => {
-            sendDecision('doubledn');
+            doubleDn();
         });
         stayBtn.addEventListener('click', () => {
             stay();
@@ -79,7 +79,6 @@ const initializeGameUI = () => {
 
 const bust = async () => {
     try {
-        await new Promise(resolve => setTimeout(resolve, 3000));
         const response = await fetch("/api/classic/bust", {
             method: "POST",
             headers: {
@@ -89,15 +88,7 @@ const bust = async () => {
         });
         const data = await response.json();
         console.log(data);
-        console.log(data.gameState.playerBalance);
-
-        currentWager.textContent = 'Current Wager: $0';
-        bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
-
-        playerCard1.removeAttribute('src');
-        playerCard2.removeAttribute('src');
-        playerCard3.removeAttribute('src');
-        playerCard4.removeAttribute('src');
+        loss();
 
     } catch (error) {
         console.error("Error:", error);
@@ -122,22 +113,10 @@ const hit = async () => {
             console.log('newplayercard',data.gameState.playerHand[data.gameState.playerHand.length-1]);
             playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[data.gameState.playerHand.length-1].filename);
         } 
-        // else if (data.gameState.playerHand.length === 4) {
-        //     playerCard4.setAttribute('src', './images/card_images/' + data.gameState.playerHand[data.gameState.playerHand.length-1].filename)
-        // }
-
-
-        // else if (data.gameState.playerHand.length = 3){
-        //     console.log('newplayercard',data.gameState.playerHand[data.gameState.playerHand.length-1]);
-        //     // playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[data.gameState.playerHand.length-1].filename);
-        // }
-
-
-        // currentWager.textContent = 'Current Wager: $' + data.gameState.playerBet;
-
-        // bankRoll.textContent = 'Bank Roll: $' + data.gameState.playerBalance;
         if (data.message === 'bust') {
             await bust();
+        } else if (data.message === 'blackjack') {
+            await blackJack();
         }
 
     } catch (error) {
@@ -164,6 +143,13 @@ const deal = async () => {
         
         // compCard1.setAttribute('src', './images/card_images/' + data.computerHand[1].filename);
         // compCard2.setAttribute('src', './images/card_images/' + data.computerHand[1].filename);
+
+
+        if (calcHandValue(data.gameState.playerHand) === 21 && calcHandValue(data.gameState.computerHand) === 21) {
+            push();
+        } else if (calcHandValue(data.gameState.playerHand) === 21 && calcHandValue(data.gameState.computerHand) !== 21) {
+            blackJack();
+        }
 
     } catch(err) {
         console.log(`Error dealing: ${err}`);
@@ -204,6 +190,24 @@ function updateChipCount(newChipCount) {
     chipCountElement.textContent = newChipCount;
 }
 
+const doubleDn = async () => {
+    try { 
+        const response = await fetch("/api/classic/doubledn", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+        const data = await response.json();
+        console.log(data);
+
+        currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
 const sendDecision = async (decision) => {
     try { 
         const response = await fetch("/api/classic/" + decision, {
@@ -216,10 +220,6 @@ const sendDecision = async (decision) => {
         const data = await response.json();
         console.log(data);
 
-        // if (decision === 'hit' && data.gameState.handBusts === true) {
-            // playerCard1.removeAttribute('src', '');
-            // playerCard2.removeAttribute('src', '');
-        // }
 
     } catch (error) {
         console.error("Error:", error);
@@ -262,19 +262,21 @@ const stay = async () => {
         let playerTotal = 0;
         let computerTotal = 0;
         if (data.stayMessage === 'Dealer bust') {
-            await computerBust();
+            computerBust();
         } else if (data.stayMessage === 'Dealer stay'){
             playerTotal = calcHandValue(data.gameState.playerHand);
             computerTotal = calcHandValue(data.gameState.computerHand);
             console.log(playerTotal);
             console.log(computerTotal);
+            if (playerTotal > computerTotal) {
+                win();
+            } else if (playerTotal === computerTotal) {
+                push();
+            } else if (playerTotal < computerTotal) {
+                loss();
+            }
         }
 
-        if (playerTotal > computerTotal) {
-            win();
-        } else {
-            loss();
-        }
 
     } catch (err) {
         console.error("Error:", err);
@@ -283,7 +285,6 @@ const stay = async () => {
 
 const computerBust = async () => {
     try {
-        await new Promise(resolve => setTimeout(resolve, 3000));
         const response = await fetch("/api/classic/computerbust", {
             method: "POST",
             headers: {
@@ -294,14 +295,7 @@ const computerBust = async () => {
         const data = await response.json();
         console.log(data);
         // console.log(data.gameState.playerBalance);
-
-        currentWager.textContent = 'Current Wager: $0';
-        bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
-
-        playerCard1.removeAttribute('src');
-        playerCard2.removeAttribute('src');
-        playerCard3.removeAttribute('src');
-        playerCard4.removeAttribute('src');
+        win();
 
     } catch (error) {
         console.error("Error:", error);
@@ -335,6 +329,7 @@ const win = async () => {
     }
 };
 
+
 const loss = async () => {
     try {
         await new Promise(resolve => setTimeout(resolve, 3000));
@@ -356,6 +351,60 @@ const loss = async () => {
         playerCard2.removeAttribute('src');
         playerCard3.removeAttribute('src');
         playerCard4.removeAttribute('src');
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
+
+const push = async () => {
+    try {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        const response = await fetch("/api/classic/push", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+        const data = await response.json();
+        console.log(data);
+        console.log(data.gameState.playerBalance);
+
+        currentWager.textContent = 'Current Wager: $0';
+        bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
+
+        playerCard1.removeAttribute('src');
+        playerCard2.removeAttribute('src');
+        playerCard3.removeAttribute('src');
+        playerCard4.removeAttribute('src');
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+};
+
+const blackJack = async () => {
+    try {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        const response = await fetch("/api/classic/blackjack", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+        const data = await response.json();
+        console.log(data);
+        // console.log(data.gameState.playerBalance);
+
+        // currentWager.textContent = 'Current Wager: $0';
+        // bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
+
+        // playerCard1.removeAttribute('src');
+        // playerCard2.removeAttribute('src');
+        // playerCard3.removeAttribute('src');
+        // playerCard4.removeAttribute('src');
 
     } catch (error) {
         console.error("Error:", error);
