@@ -1,3 +1,4 @@
+
 const { User } = require('../models')
 
 const calcHandValue = (hand) => {
@@ -8,13 +9,24 @@ const calcHandValue = (hand) => {
     return total;
 };
 
-const updateDataBaseBalance = async (id, newBalance) => {
+const updateDataBaseBalance = async (id, newBalance, outcome) => {
+    try {
+        // Update chip count
         await User.update(
             { chipCount: newBalance },
             { where: { id } }
         );
+
+        // Update wins count based on outcome
+        if (outcome === 'win') {
+            await User.increment('wins', { by: 1, where: { id } });
+        }
+
         const user = await User.findByPk(id);
         // console.log(user);
+    } catch (err) {
+        console.error(`Error updating database balance: ${err}`);
+    }
 };
 
 const checkWinner = (playerHand, computerHand)  => {
@@ -67,5 +79,14 @@ const isBust = (hand) => {
 }
 
 
+const updatePlayerWins = async (id) => {
+    try {
+        await User.increment('handsWon', { by: 1, where: { id } });
+    } catch (err) {
+        console.error(`Error updating player's win count: ${err}`);
+    }
+};
 
-module.exports = { calcHandValue, updateDataBaseBalance, checkWinner, calculateNewBalance, isBust };
+
+
+module.exports = { calcHandValue, updateDataBaseBalance, checkWinner, calculateNewBalance, isBust, updatePlayerWins };

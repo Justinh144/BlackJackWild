@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User, Card } = require('../../models');
 const  { Game } = require('../../utils/gameplay/test');
-const { calcHandValue, updateDataBaseBalance, checkWinner, calculateNewBalance, isBust } = require('../../utils/helpers');
+const { calcHandValue, updateDataBaseBalance, checkWinner, calculateNewBalance, isBust, updatePlayerWins } = require('../../utils/helpers');
 const withAuth = require('../../utils/auth');
 
 router.get('/initialize', withAuth, async (req, res) => {
@@ -421,6 +421,9 @@ router.post('/computerbust', (req, res) => {
 
 router.post('/win', async (req, res) => {
     try{
+
+        await updatePlayerWins(req.session.user_id);
+
         const { gameState } = req.session;
         gameState.computerHand = [];
         gameState.playerHand = [];
@@ -428,6 +431,10 @@ router.post('/win', async (req, res) => {
         gameState.playerBalance = gameState.playerBalance + gameState.playerBet;
         gameState.playerBet = 0;
         
+        const user= await User.findByPk(req.session.user_id);
+        user.wins += 1;
+        await user.save();
+
         res.status(200).json({ message: 'res object after win', gameState: gameState});
     } catch(err) {
         res.status(500).json({ message: `Error at /win: ${err}`});
