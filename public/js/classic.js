@@ -28,6 +28,20 @@ const calcHandValue = (hand) => {
     return total;
 };
 
+const showMessage = (message) => {
+    const popUp = document.getElementById('pop_up');
+    const popUpContent = document.getElementById('pop_up_content');
+    popUpContent.textContent = message;
+    popUp.style.display = 'block';
+    setTimeout(() => {
+        popUp.style.opacity = '0';
+        setTimeout(() => {
+            popUp.style.display = 'none';
+            popUp.style.opacity = '1';
+        }, 1000);
+    }, 3000);
+};
+
 let currentHand = 'splitHand1';
 let isUserSplit = false;
 
@@ -43,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 const initializeGameUI = () => {
     try {
         splitBtn.addEventListener('click', () => {
-            sendDecision('split');
+            split();
         });
         hitBtn.addEventListener('click', () => {
             hit();
@@ -85,23 +99,24 @@ const initializeGameUI = () => {
     }
 };
 
-const bust = async () => {
-    try {
-        const response = await fetch("/api/classic/bust", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-        });
-        const data = await response.json();
-        console.log(data);
-        loss();
+// const bust = async () => {
+//     try {
+//         const response = await fetch("/api/classic/bust", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify({}),
+//         });
+//         const data = await response.json();
+//         console.log(data);
+//         showMessage(data.outcome);
+//         loss('You Busted!');
 
-    } catch (error) {
-        console.error("Error:", error);
-    }
-};
+//     } catch (error) {
+//         console.error("Error:", error);
+//     }
+// };
 
 
 const hit = async () => {
@@ -114,24 +129,31 @@ const hit = async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
-        console.log(data.gameState.playerHand.length)
 
-        data.gameState.playerHand.forEach((card, index) => {
-            const playerCardSlot = document.getElementById(`card${index + 1}`);
-            playerCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
-        });
-        if (data.message === 'bust') {
-            hideCard.removeAttribute('src');
-            await bust();
-        } else if (data.message === 'blackjack') {
-            await blackJack();
+        if (data.error) {
+            showMessage(data.error);
+        } else {
+            console.log(data);
+            console.log(data.gameState.playerHand.length)
+
+            data.gameState.playerHand.forEach((card, index) => {
+                const playerCardSlot = document.getElementById(`card${index + 1}`);
+                playerCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
+            });
+            if (data.message === 'You Busted!') {
+                hideCard.removeAttribute('src');
+                loss(data.message);
+            } else if (data.message === 'blackjack') {
+                blackJack();
+            }
         }
 
     } catch (error) {
         console.error("Error:", error);
     }
 }
+
+
 
 const deal = async () => {
     try {
@@ -143,20 +165,24 @@ const deal = async () => {
         });
         const data = await response.json();
         console.log(data);
-        hideCard.setAttribute('src', './images/card_images/card_card_back.png');
-        // console.log('data after dealing is\n',data);
-        // console.log(data.playerHand[0].filename);
-
-        document.getElementById('card1').setAttribute('src', './images/card_images/' + data.gameState.playerHand[0].filename);
-        document.getElementById('card2').setAttribute('src', './images/card_images/' + data.gameState.playerHand[1].filename);
-
-        
-        document.getElementById('compCard1').setAttribute('src', './images/card_images/' + data.gameState.computerHand[0].filename);
-        document.getElementById('compCard2').setAttribute('src', './images/card_images/' + data.gameState.computerHand[1].filename);
-
-
-        if (calcHandValue(data.gameState.playerHand) === 21) {
-            blackJack();
+        if (data.error) {
+            showMessage(data.error);
+        } else {
+            hideCard.setAttribute('src', './images/card_images/card_card_back.png');
+            // console.log('data after dealing is\n',data);
+            // console.log(data.playerHand[0].filename);
+    
+            document.getElementById('card1').setAttribute('src', './images/card_images/' + data.gameState.playerHand[0].filename);
+            document.getElementById('card2').setAttribute('src', './images/card_images/' + data.gameState.playerHand[1].filename);
+    
+            
+            document.getElementById('compCard1').setAttribute('src', './images/card_images/' + data.gameState.computerHand[0].filename);
+            document.getElementById('compCard2').setAttribute('src', './images/card_images/' + data.gameState.computerHand[1].filename);
+    
+    
+            if (calcHandValue(data.gameState.playerHand) === 21) {
+                blackJack();
+            }
         }
 
     } catch(err) {
@@ -188,6 +214,10 @@ const sendBet = async (placedBet) => {
         const data = await response.json();
         console.log(data);
         currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
+
+        if (data.error) {
+            showMessage(data.error)
+        }
     } catch (error) {
         console.error("Error:", error);
     }
@@ -209,24 +239,31 @@ const doubleDn = async () => {
         });
         const data = await response.json();
         console.log(data);
-
         currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
+
+        if (data.error) {
+            showMessage(data.error);
+        }
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-const sendDecision = async (decision) => {
+const split = async () => {
     try { 
-        const response = await fetch("/api/classic/" + decision, {
+        const response = await fetch("/api/classic/split", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ decision, currentHand }),
+            body: JSON.stringify({}),
         });
         const data = await response.json();
         console.log(data);
+
+        if (data.error) {
+            showMessage(data.error)
+        }
 
 
     } catch (error) {
@@ -284,11 +321,11 @@ const drawComputerCard = async () => {
             console.log(playerTotal);
             console.log(computerTotal);
             if (playerTotal > computerTotal) {
-                win();
+                win('You Win!');
             } else if (playerTotal === computerTotal) {
-                push();
+                push('Push');
             } else if (playerTotal < computerTotal) {
-                loss();
+                loss('You Lost!');
             }
         }
 
@@ -309,32 +346,38 @@ const stay = async () => {
         const data = await response.json();
         console.log(data);
 
-        data.gameState.computerHand.forEach((card, index) => {
-            const compCardSlot = document.getElementById(`compCard${index + 1}`);
-            compCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
-        });
-
-        hideCard.removeAttribute('src');
-
-
-        let playerTotal = 0;
-        let computerTotal = 0;
-        if (data.stayMessage === 'Dealer stay'){
-            playerTotal = calcHandValue(data.gameState.playerHand);
-            computerTotal = calcHandValue(data.gameState.computerHand);
-            console.log(playerTotal);
-            console.log(computerTotal);
-            if (playerTotal > computerTotal) {
-                win();
-            } else if (playerTotal === computerTotal) {
-                push();
-            } else if (playerTotal < computerTotal) {
-                loss();
+        if (data.error) {
+            showMessage(data.error) 
+        } else {
+            data.gameState.computerHand.forEach((card, index) => {
+                const compCardSlot = document.getElementById(`compCard${index + 1}`);
+                compCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
+            });
+    
+            hideCard.removeAttribute('src');
+    
+    
+            let playerTotal = 0;
+            let computerTotal = 0;
+            if (data.stayMessage === 'Dealer stay'){
+                playerTotal = calcHandValue(data.gameState.playerHand);
+                computerTotal = calcHandValue(data.gameState.computerHand);
+                console.log(playerTotal);
+                console.log(computerTotal);
+                if (playerTotal > computerTotal) {
+                    console.log('player wins');
+                    win('You Win!');
+                } else if (playerTotal === computerTotal) {
+                    console.log('push');
+                    push('Push');
+                } else if (playerTotal < computerTotal) {
+                    console.log('player loses');
+                    loss('You Lost!');
+                }
+            } else if (data.stayMessage === 'Dealer hit'){
+                drawComputerCard();
             }
-        } else if (data.stayMessage === 'Dealer hit'){
-            drawComputerCard();
         }
-
 
     } catch (err) {
         console.error("Error:", err);
@@ -353,15 +396,14 @@ const computerBust = async () => {
         const data = await response.json();
         console.log(data);
         // console.log(data.gameState.playerBalance);
-
-        win();
+        win('Computer Busts!');
 
     } catch (error) {
         console.error("Error:", error);
     }
 };
 
-const win = async () => {
+const win = async (message) => {
     try {
         await new Promise(resolve => setTimeout(resolve, 3000));
         const response = await fetch("/api/classic/win", {
@@ -373,6 +415,7 @@ const win = async () => {
         });
         const data = await response.json();
         console.log(data);
+        showMessage(message);
 
         currentWager.textContent = 'Current Wager: $0';
         bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
@@ -397,7 +440,7 @@ const win = async () => {
 };
 
 
-const loss = async () => {
+const loss = async (message) => {
     try {
         await new Promise(resolve => setTimeout(resolve, 3000));
         const response = await fetch("/api/classic/loss", {
@@ -410,6 +453,7 @@ const loss = async () => {
         const data = await response.json();
         console.log(data);
         // console.log(data.gameState.playerBalance);
+        showMessage(message);
 
         currentWager.textContent = 'Current Wager: $0';
         bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
@@ -434,7 +478,7 @@ const loss = async () => {
     }
 };
 
-const push = async () => {
+const push = async (message) => {
     try {
         await new Promise(resolve => setTimeout(resolve, 3000));
         const response = await fetch("/api/classic/push", {
@@ -447,6 +491,7 @@ const push = async () => {
         const data = await response.json();
         console.log(data);
         console.log(data.gameState.playerBalance);
+        showMessage(message);
 
         playerCard1.removeAttribute('src');
         playerCard2.removeAttribute('src');
@@ -470,7 +515,7 @@ const push = async () => {
     }
 };
 
-const blackJack = async () => {
+const blackJack = async (message) => {
     try {
         await new Promise(resolve => setTimeout(resolve, 3000));
         const response = await fetch("/api/classic/blackjack", {
@@ -483,6 +528,7 @@ const blackJack = async () => {
         const data = await response.json();
         console.log(data);
         console.log(data.gameState.playerBalance);
+        showMessage(message);
 
         playerCard1.removeAttribute('src');
         playerCard2.removeAttribute('src');
