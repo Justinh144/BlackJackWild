@@ -141,8 +141,8 @@ const deal = async () => {
         playerCard2.setAttribute('src', './images/card_images/' + data.gameState.playerHand[1].filename);
 
         
-        // compCard1.setAttribute('src', './images/card_images/' + data.computerHand[1].filename);
-        // compCard2.setAttribute('src', './images/card_images/' + data.computerHand[1].filename);
+        compCard1.setAttribute('src', './images/card_images/' + data.gameState.computerHand[0].filename);
+        compCard2.setAttribute('src', './images/card_images/' + data.gameState.computerHand[1].filename);
 
 
         if (calcHandValue(data.gameState.playerHand) === 21 && calcHandValue(data.gameState.computerHand) === 21) {

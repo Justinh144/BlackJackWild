@@ -49,6 +49,9 @@ router.post('/hit', async (req, res) => {
         if (playerBet === null || playerBet === undefined || playerBet === 0) {
             return res.status(400).json({ error: 'Please place a bet first' });
         }
+        if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21) {
+            return res.status(400).json({ error: 'You cannot hit again!'});
+        }
 
         if (split) {
             if ((splitHand1.length === null || splitHand1.length === undefined || splitHand1.length === 0)&&
@@ -231,16 +234,16 @@ router.post('/split', (req, res) => {
         let playerBet = req.session.gameState.playerBet;
 
         if (playerBet === null || playerBet === undefined || playerBet === 0) {
-            return res.status(400).json({ error: 'Please place a bet first' });
+            return res.status(200).json({ message: 'Please place a bet first', gameState: req.session.gameState });
         }
 
         if (playerHand.length === null || playerHand.length === undefined || playerHand.length === 0) {
-            return res.status(400).json({ error: 'You must deal cards!' });
+            return res.status(200).json({ message: 'You must deal cards!' , gameState: req.session.gameState});
         }
 
-        // if (playerHand[0].value !== playerHand[1].value) {
-        //     return res.status(400).json({ error: 'You cannot split cards that are not of the same value!' });
-        // }
+        if (playerHand[0].value !== playerHand[1].value) {
+            return res.status(200).json({ message: 'You cannot split hands that do not hold the same value!' , gameState: req.session.gameState});
+        }
 
         console.log(playerHand);
         let splitHand1 = [playerHand[0]];
@@ -278,12 +281,16 @@ router.post('/doubledn', (req, res) => {
         let playerBet = req.session.gameState.playerBet;
 
         if (playerBet === null || playerBet === undefined || playerBet === 0) {
-            return res.status(400).json({ error: 'Please place a bet first' });
+            return res.status(400).json({ message: 'Please place a bet first' });
         }
 
         if (playerHand.length === null || playerHand.length === undefined || playerHand.length === 0) {
-            return res.status(400).json({ error: 'You must deal cards!' });
+            return res.status(400).json({ message: 'You must deal cards!' });
         }
+
+        if (playerHand.length > 2) {
+            return res.status(200).json({ message: 'You cannot double down after hitting!', gameState: req.session.gameState});
+        } 
 
         const doubledBet = playerBet * 2;
 
