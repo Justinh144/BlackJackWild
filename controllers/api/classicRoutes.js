@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User, Card } = require('../../models');
-const  { Game } = require('../../utils/gameplay/test');
-const { calcHandValue, updateDataBaseBalance, checkWinner, calculateNewBalance, isBust, updatePlayerWins } = require('../../utils/helpers');
+const  { Game } = require('../../utils/gameplay/Game');
+const { calcHandValue, updateDataBaseBalance, calculateNewBalance, isBust, updatePlayerWins } = require('../../utils/helpers');
 const withAuth = require('../../utils/auth');
 
 router.get('/initialize', withAuth, async (req, res) => {
@@ -191,9 +191,9 @@ router.post('/stay', async (req, res) => {
         // if (calcHandValue(computerHand) > 21) {
         //     stayMessage = 'Dealer bust';
         // } else 
-        if (calcHandValue(computerHand) >= 16) {
+        if (calcHandValue(computerHand) >= 17) {
             stayMessage = 'Dealer stay';
-        } else if (calcHandValue(computerHand) < 16) {
+        } else {
             stayMessage = 'Dealer hit';
         }
 
@@ -490,7 +490,7 @@ router.post('/drawcomputercard', (req, res) => {
         let deck = req.session.gameState.deck;
 
         const newCard = deck.shift();
-        computerHand.unshift(newCard);
+        computerHand.push(newCard);
         deck.push(newCard);
 
         res.status(200).json({ message: 'res object after drawComputerCard', gameState: req.session.gameState});

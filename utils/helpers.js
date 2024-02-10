@@ -1,4 +1,3 @@
-
 const { User } = require('../models')
 
 const calcHandValue = (hand) => {
@@ -26,36 +25,6 @@ const updateDataBaseBalance = async (id, newBalance, outcome) => {
         // console.log(user);
     } catch (err) {
         console.error(`Error updating database balance: ${err}`);
-    }
-};
-
-const checkWinner = (playerHand, computerHand)  => {
-    let outcome;
-    const playerHandValue = calcHandValue(playerHand);
-    const computerHandValue = calcHandValue(computerHand);
-    // console.log(`player hand value\n`, playerHandValue);
-    // console.log(`computer hand value\n`,computerHandValue);
-
-    if (playerHandValue > 21) {
-        console.log('Player busts! Computer wins.');
-        outcome = 'loss';
-        return outcome;
-    } else if (computerHandValue > 21) {
-        console.log('Computer busts! Player wins.');
-        outcome = 'win';
-        return outcome;
-    } else if (playerHandValue === computerHandValue) {
-        console.log('It\'s a tie!');
-        outcome = 'tie'
-        return outcome;
-    } else if (playerHandValue > computerHandValue) {
-        console.log('Player wins!');
-        outcome = 'win';
-        return outcome;
-    } else {
-        console.log('Computer wins!');
-        outcome = 'loss';
-        return outcome;
     }
 };
 
@@ -89,4 +58,4 @@ const updatePlayerWins = async (id) => {
 
 
 
-module.exports = { calcHandValue, updateDataBaseBalance, checkWinner, calculateNewBalance, isBust, updatePlayerWins };
+module.exports = { calcHandValue, updateDataBaseBalance, calculateNewBalance, isBust, updatePlayerWins };

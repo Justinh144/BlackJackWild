@@ -186,6 +186,10 @@ body {
 
 /* ******************************************* */
 
+.key {
+    color: grey;
+}
+
 .spacer_container {
     display: flex;
     background-image: url('../images/table_images/tablegraphics_middle.png');

@@ -80,18 +80,51 @@ const initializeGameUI = () => {
         });
         hideCard.removeAttribute('src');
         document.addEventListener('keypress', async (event) => {
-            try {
-                if (event.key === ' ') {
-                    event.preventDefault();
-                    // console.log('keypress');
-                    await toggleHand();
-                } else {
-                    console.log('no split occurred');
+            try{
+                switch(event.key) {
+                    case ' ':
+                        event.preventDefault();
+                        await toggleHand();
+                        break;
+                    case 's':
+                        stay();
+                        break;
+                    case 'h':
+                        hit();
+                        break;
+                    case 'd':
+                        deal();
+                        break;
+                    case 'x':
+                        doubleDn();
+                        break;
+                    case 't':
+                        split();
+                        break;
+                    case 'b': 
+                        sendBet(100);
+                        break;
+                    default:
+                        console.log('Invalid key press');
                 }
-            } catch (err) {
-                console.error('Error toggling hand:', err);
+
+            } catch (error) {
+                console.error(error);
             }
         });
+        // document.addEventListener('keypress', async (event) => {
+        //     try {
+        //         if (event.key === ' ') {
+        //             event.preventDefault();
+        //             // console.log('keypress');
+        //             await toggleHand();
+        //         } else {
+        //             console.log('no split occurred');
+        //         }
+        //     } catch (err) {
+        //         console.error('Error toggling hand:', err);
+        //     }
+        // });
 
 
     } catch (err) {
@@ -143,8 +176,8 @@ const hit = async () => {
             if (data.message === 'You Busted!') {
                 hideCard.removeAttribute('src');
                 loss(data.message);
-            } else if (data.message === 'blackjack') {
-                blackJack();
+            } else if (data.message === 'Blackjack!') {
+                blackJack(data.message);
             }
         }
 
@@ -181,7 +214,7 @@ const deal = async () => {
     
     
             if (calcHandValue(data.gameState.playerHand) === 21) {
-                blackJack();
+                blackJack('Blackjack!');
             }
         }
 
@@ -312,7 +345,7 @@ const drawComputerCard = async () => {
 
         let playerTotal;
         let computerTotal;
-        if (calcHandValue(data.gameState.computerHand) < 16){
+        if (calcHandValue(data.gameState.computerHand) < 17){
             drawComputerCard();
         } else {
             hideCard.removeAttribute('src');
@@ -320,11 +353,13 @@ const drawComputerCard = async () => {
             computerTotal = calcHandValue(data.gameState.computerHand);
             console.log(playerTotal);
             console.log(computerTotal);
-            if (playerTotal > computerTotal) {
+            if(computerTotal > 21) {
+                computerBust();
+            } else if (playerTotal > computerTotal) {
                 win('You Win!');
             } else if (playerTotal === computerTotal) {
                 push('Push');
-            } else if (playerTotal < computerTotal) {
+            } else if (playerTotal < computerTotal && computerTotal <= 21) {
                 loss('You Lost!');
             }
         }
@@ -353,9 +388,8 @@ const stay = async () => {
                 const compCardSlot = document.getElementById(`compCard${index + 1}`);
                 compCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
             });
-    
+        
             hideCard.removeAttribute('src');
-    
     
             let playerTotal = 0;
             let computerTotal = 0;
@@ -396,7 +430,7 @@ const computerBust = async () => {
         const data = await response.json();
         console.log(data);
         // console.log(data.gameState.playerBalance);
-        win('Computer Busts!');
+        win('Opponent Busts!');
 
     } catch (error) {
         console.error("Error:", error);
