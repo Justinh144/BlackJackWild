@@ -488,4 +488,13 @@ router.post('/push', (req, res) => {
     }
 });
 
+router.post('/drawcomputercard', (req, res) => {
+    try {
+
+        res.status(200).json({ message: 'res object after drawComputerCard', gameState: req.session.gameState});
+    } catch(err) {
+        res.status(500).json({ error: 'error at /drawComputerCard'})
+    }
+});
+
 module.exports = router
