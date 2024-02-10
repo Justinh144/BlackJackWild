@@ -5,14 +5,20 @@ const doublednBtn = document.querySelector('#doubledn_button');
 const stayBtn = document.querySelector('#stay_button');
 const chipBtns = document.getElementsByClassName('chips');
 
+// id="hidecard" --- hidden
 const currentWager = document.querySelector('.current_wager');
 const playerCard1 = document.querySelector('#card1');
 const playerCard2 = document.querySelector('#card2');
 const playerCard3 = document.querySelector('#card3');
 const playerCard4 = document.querySelector('#card4');
+const playerCard5 = document.querySelector('#card5');
 const compCard1 = document.querySelector('#compCard1');
 const compCard2 = document.querySelector('#compCard2');
+const compCard3 = document.querySelector('#compCard3');
+const compCard4 = document.querySelector('#compCard4');
+const compCard5 = document.querySelector('#compCard5');
 const bankRoll = document.querySelector('.current_bankroll');
+const hideCard = document.querySelector('#hideCard');
 
 const calcHandValue = (hand) => {
     let total = 0;
@@ -58,6 +64,7 @@ const initializeGameUI = () => {
                 sendBet(playerBet);
             });
         });
+        hideCard.removeAttribute('src');
         document.addEventListener('keypress', async (event) => {
             try {
                 if (event.key === ' ') {
@@ -71,6 +78,7 @@ const initializeGameUI = () => {
                 console.error('Error toggling hand:', err);
             }
         });
+
 
     } catch (err) {
         console.error('Error initializing game UI:', err);
@@ -109,11 +117,12 @@ const hit = async () => {
         console.log(data);
         console.log(data.gameState.playerHand.length)
 
-        if (data.gameState.playerHand.length !== 2) {
-            console.log('newplayercard',data.gameState.playerHand[data.gameState.playerHand.length-1]);
-            playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[data.gameState.playerHand.length-1].filename);
-        } 
+        data.gameState.playerHand.forEach((card, index) => {
+            const playerCardSlot = document.getElementById(`card${index + 1}`);
+            playerCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
+        });
         if (data.message === 'bust') {
+            hideCard.removeAttribute('src');
             await bust();
         } else if (data.message === 'blackjack') {
             await blackJack();
@@ -134,20 +143,19 @@ const deal = async () => {
         });
         const data = await response.json();
         console.log(data);
+        hideCard.setAttribute('src', './images/card_images/card_card_back.png');
         // console.log('data after dealing is\n',data);
         // console.log(data.playerHand[0].filename);
 
-        playerCard1.setAttribute('src', './images/card_images/' + data.gameState.playerHand[0].filename);
-        playerCard2.setAttribute('src', './images/card_images/' + data.gameState.playerHand[1].filename);
+        document.getElementById('card1').setAttribute('src', './images/card_images/' + data.gameState.playerHand[0].filename);
+        document.getElementById('card2').setAttribute('src', './images/card_images/' + data.gameState.playerHand[1].filename);
 
         
-        compCard1.setAttribute('src', './images/card_images/' + data.gameState.computerHand[0].filename);
-        compCard2.setAttribute('src', './images/card_images/' + data.gameState.computerHand[1].filename);
+        document.getElementById('compCard1').setAttribute('src', './images/card_images/' + data.gameState.computerHand[0].filename);
+        document.getElementById('compCard2').setAttribute('src', './images/card_images/' + data.gameState.computerHand[1].filename);
 
 
-        if (calcHandValue(data.gameState.playerHand) === 21 && calcHandValue(data.gameState.computerHand) === 21) {
-            push();
-        } else if (calcHandValue(data.gameState.playerHand) === 21 && calcHandValue(data.gameState.computerHand) !== 21) {
+        if (calcHandValue(data.gameState.playerHand) === 21) {
             blackJack();
         }
 
@@ -247,6 +255,48 @@ const toggleHand = async () => {
     }
 };
 
+const drawComputerCard = async () => {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+        const response = await fetch("/api/classic/drawcomputercard", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+        const data = await response.json();
+        console.log(data);
+
+        data.gameState.computerHand.forEach((card, index) => {
+            const compCardSlot = document.getElementById(`compCard${index + 1}`);
+            compCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
+        });
+
+        let playerTotal;
+        let computerTotal;
+        if (calcHandValue(data.gameState.computerHand) < 16){
+            drawComputerCard();
+        } else {
+            hideCard.removeAttribute('src');
+            playerTotal = calcHandValue(data.gameState.playerHand);
+            computerTotal = calcHandValue(data.gameState.computerHand);
+            console.log(playerTotal);
+            console.log(computerTotal);
+            if (playerTotal > computerTotal) {
+                win();
+            } else if (playerTotal === computerTotal) {
+                push();
+            } else if (playerTotal < computerTotal) {
+                loss();
+            }
+        }
+
+    } catch(error) {
+        console.error(error);
+    }
+};
+
 const stay = async () => {
     try { 
         const response = await fetch("/api/classic/stay", {
@@ -259,11 +309,17 @@ const stay = async () => {
         const data = await response.json();
         console.log(data);
 
+        data.gameState.computerHand.forEach((card, index) => {
+            const compCardSlot = document.getElementById(`compCard${index + 1}`);
+            compCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
+        });
+
+        hideCard.removeAttribute('src');
+
+
         let playerTotal = 0;
         let computerTotal = 0;
-        if (data.stayMessage === 'Dealer bust') {
-            computerBust();
-        } else if (data.stayMessage === 'Dealer stay'){
+        if (data.stayMessage === 'Dealer stay'){
             playerTotal = calcHandValue(data.gameState.playerHand);
             computerTotal = calcHandValue(data.gameState.computerHand);
             console.log(playerTotal);
@@ -275,6 +331,8 @@ const stay = async () => {
             } else if (playerTotal < computerTotal) {
                 loss();
             }
+        } else if (data.stayMessage === 'Dealer hit'){
+            drawComputerCard();
         }
 
 
@@ -295,6 +353,7 @@ const computerBust = async () => {
         const data = await response.json();
         console.log(data);
         // console.log(data.gameState.playerBalance);
+
         win();
 
     } catch (error) {
@@ -322,8 +381,16 @@ const win = async () => {
         playerCard2.removeAttribute('src');
         playerCard3.removeAttribute('src');
         playerCard4.removeAttribute('src');
+        playerCard5.removeAttribute('src');
 
-        updatePlayerWins(); // Call to update player's win count
+        compCard1.removeAttribute('src');
+        compCard2.removeAttribute('src');
+        compCard3.removeAttribute('src');
+        compCard4.removeAttribute('src');
+        compCard5.removeAttribute('src');
+
+        hideCard.removeAttribute('src');
+
     } catch (error) {
         console.error("Error:", error);
     }
@@ -351,6 +418,16 @@ const loss = async () => {
         playerCard2.removeAttribute('src');
         playerCard3.removeAttribute('src');
         playerCard4.removeAttribute('src');
+        playerCard5.removeAttribute('src');
+
+        compCard1.removeAttribute('src');
+        compCard2.removeAttribute('src');
+        compCard3.removeAttribute('src');
+        compCard4.removeAttribute('src');
+        compCard5.removeAttribute('src');
+
+        hideCard.removeAttribute('src');
+
 
     } catch (error) {
         console.error("Error:", error);
@@ -371,13 +448,22 @@ const push = async () => {
         console.log(data);
         console.log(data.gameState.playerBalance);
 
-        currentWager.textContent = 'Current Wager: $0';
-        bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
-
         playerCard1.removeAttribute('src');
         playerCard2.removeAttribute('src');
         playerCard3.removeAttribute('src');
         playerCard4.removeAttribute('src');
+        playerCard5.removeAttribute('src');
+
+        compCard1.removeAttribute('src');
+        compCard2.removeAttribute('src');
+        compCard3.removeAttribute('src');
+        compCard4.removeAttribute('src');
+        compCard5.removeAttribute('src');
+
+        currentWager.textContent = 'Current Wager: $0';
+        bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
+
+        hideCard.removeAttribute('src');
 
     } catch (error) {
         console.error("Error:", error);
@@ -396,15 +482,24 @@ const blackJack = async () => {
         });
         const data = await response.json();
         console.log(data);
-        // console.log(data.gameState.playerBalance);
+        console.log(data.gameState.playerBalance);
 
-        // currentWager.textContent = 'Current Wager: $0';
-        // bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
+        playerCard1.removeAttribute('src');
+        playerCard2.removeAttribute('src');
+        playerCard3.removeAttribute('src');
+        playerCard4.removeAttribute('src');
+        playerCard5.removeAttribute('src');
 
-        // playerCard1.removeAttribute('src');
-        // playerCard2.removeAttribute('src');
-        // playerCard3.removeAttribute('src');
-        // playerCard4.removeAttribute('src');
+        compCard1.removeAttribute('src');
+        compCard2.removeAttribute('src');
+        compCard3.removeAttribute('src');
+        compCard4.removeAttribute('src');
+        compCard5.removeAttribute('src');
+
+        currentWager.textContent = 'Current Wager: $0';
+        bankRoll.textContent = 'Bankroll: $' + data.gameState.playerBalance;
+
+        hideCard.removeAttribute('src');
 
     } catch (error) {
         console.error("Error:", error);

@@ -49,9 +49,10 @@ router.post('/hit', async (req, res) => {
         if (playerBet === null || playerBet === undefined || playerBet === 0) {
             return res.status(400).json({ error: 'Please place a bet first' });
         }
-        if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21) {
+        if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21 || playerHand.length > 5) {
             return res.status(400).json({ error: 'You cannot hit again!'});
         }
+
 
         if (split) {
             if ((splitHand1.length === null || splitHand1.length === undefined || splitHand1.length === 0)&&
@@ -117,6 +118,9 @@ router.post('/hit', async (req, res) => {
             }
 
         } else {
+            if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21 || playerHand.length > 5) {
+                return res.status(400).json({ error: 'You cannot hit again!'});
+            }
 
             if (playerHand.length === null || playerHand.length === undefined || playerHand.length === 0) {
                 return res.status(400).json({ error: 'You must deal cards!' });
@@ -169,54 +173,32 @@ router.post('/stay', async (req, res) => {
         if (playerHand.length === null || playerHand.length === undefined || playerHand.length === 0) {
             return res.status(400).json({ error: 'You must deal cards!' });
         }
-        
-        while (calcHandValue(computerHand) < 17) {
-            let newCard = deck.shift();
-            computerHand.push(newCard);
-            req.session.gameState.computerHand = computerHand
-            deck.push(newCard);
+
+        if (calcHandValue(computerHand) >= 17) {
+            return res.status(200).json({ stayMessage: 'Dealer stay', gameState: req.session.gameState})
         }
+
+        // const newCard = deck.shift();
+        // computerHand.unshift(newCard);
+        // deck.push(newCard);
+        // req.session.gameState.computerHand = computerHand;
+        // req.session.gameState.deck = deck;
 
 
         let stayMessage = '';
-        if (calcHandValue(computerHand) > 21) {
-            stayMessage = 'Dealer bust';
-        } else if(calcHandValue(computerHand) >=17 && calcHandValue(computerHand) <= 21) {
+        // if (calcHandValue(computerHand) > 21) {
+        //     stayMessage = 'Dealer bust';
+        // } else 
+        if (calcHandValue(computerHand) >= 16) {
             stayMessage = 'Dealer stay';
+        } else if (calcHandValue(computerHand) < 16) {
+            stayMessage = 'Dealer hit';
         }
 
-        // let computerTurn = true;
-        // while (computerTurn) {
-        //     let newCard = deck.shift();
-        //     computerHand.push(newCard);
-        //     if (calcHandValue(computerHand) > 21) {
-        //         computerTurn = false;
-        //         deck.push(newCard);
-        //         // req.session.gameState.computerHand = computerHand;
-        //         // console.log('computer hand when > 21',req.session.gameState.computerHand);
-        //         return res.status(200).json({ message: 'Dealer bust', route: 'stay', gameState: req.session.gameState});
-        //     } else if (calcHandValue(computerHand) >= 17) {
-        //             computerTurn = false;
-        //             deck.push(newCard);
-        //             // req.session.gameState.computerHand = computerHand;
-        //             // console.log('computer hand when >= 17',req.session.gameState.computerHand)
-        //             return res.status(200).json({ message: 'Dealer hand > 17, dealer stay', route: 'stay', gameState: req.session.gameState});
-        //     } else {
-        //         deck.push(newCard);
-        //         // req.session.gameState.computerHand = computerHand;
-        //     }
-        // }
+        // const outcome = checkWinner(playerHand, computerHand);
+        // const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, outcome);
 
-        const outcome = checkWinner(playerHand, computerHand);
-        const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, outcome);
-
-        await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
-        // req.session.gameState.playerBalance = newPlayerBalance;
-        // req.session.gameState.playerBet = 0;
-
-        // req.session.gameState.deck = deck;
-        // console.log('end of stay', req.session.gameState);
-        // console.log('deck length', req.session.gameState.deck.length)
+        // await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
         const user = await User.findByPk(req.session.user_id);
         console.log('user at end of stay', user);
 
@@ -421,6 +403,10 @@ router.post('/win', async (req, res) => {
         await updatePlayerWins(req.session.user_id);
 
         const { gameState } = req.session;
+        newPlayerBalance = gameState.playerBalance + gameState.playerBet;
+
+        await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
+
         gameState.computerHand = [];
         gameState.playerHand = [];
         gameState.handBusts = false;
@@ -431,22 +417,28 @@ router.post('/win', async (req, res) => {
         user.wins += 1;
         await user.save();
 
-        res.status(200).json({ message: 'res object after win', gameState: gameState});
+        res.status(200).json({ message: 'res object after win', gameState: gameState, user: user});
     } catch(err) {
         res.status(500).json({ message: `Error at /win: ${err}`});
     }
 });
 
-router.post('/blackjack', (req, res) => {
+router.post('/blackjack', async (req, res) => {
     try{
         const { gameState } = req.session;
+
+        newPlayerBalance = gameState.playerBalance + gameState.playerBet;
+        await updateDataBaseBalance(req.session.user_id, (gameState.playerBalance + gameState.playerBet));
+
         gameState.computerHand = [];
         gameState.playerHand = [];
         gameState.handBusts = false;
         gameState.playerBalance = gameState.playerBalance + gameState.playerBet;
         gameState.playerBet = 0;
 
-        res.status(200).json({ message: 'res object after blackJack', gameState: gameState});
+        const user = await User.findByPk(req.session.user_id);
+
+        res.status(200).json({ message: 'res object after blackJack', gameState: gameState, user: user });
     } catch(err) {
         res.status(500).json({ message: `Error at /blackjack: ${err}`});
     }
@@ -455,14 +447,19 @@ router.post('/blackjack', (req, res) => {
 router.post('/loss', async (req, res) => {
     try{
         const { gameState } = req.session;
+
+        newPlayerBalance = gameState.playerBalance - gameState.playerBet;
+        await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
+
         gameState.computerHand = [];
         gameState.playerHand = [];
         gameState.handBusts = false;
         gameState.playerBalance = gameState.playerBalance - gameState.playerBet;
         gameState.playerBet = 0;
 
-        
-        res.status(200).json({ message: 'res object after loss', gameState: gameState});
+        const user = await User.findByPk(req.session.user_id);
+
+        res.status(200).json({ message: 'res object after loss', gameState: gameState, user:user});
     } catch(err) {
         res.status(500).json({ message: `Error at /loss: ${err}`});
     }
@@ -481,6 +478,21 @@ router.post('/push', (req, res) => {
         res.status(200).json({ message: 'res object after push', gameState: gameState});
     } catch(err) {
         res.status(500).json({ message: `Error at /push: ${err}`});
+    }
+});
+
+router.post('/drawcomputercard', (req, res) => {
+    try {  
+        let computerHand = req.session.gameState.computerHand;
+        let deck = req.session.gameState.deck;
+
+        const newCard = deck.shift();
+        computerHand.unshift(newCard);
+        deck.push(newCard);
+
+        res.status(200).json({ message: 'res object after drawComputerCard', gameState: req.session.gameState});
+    } catch(err) {
+        res.status(500).json({ error: 'error at /drawcomputercard'})
     }
 });
 
