@@ -18,7 +18,7 @@ const updateDataBaseBalance = async (id, newBalance, outcome) => {
 
         // Update wins count based on outcome
         if (outcome === 'win') {
-            await User.increment('wins', { by: 1, where: { id } });
+            await User.increment('handsWon', { by: 1, where: { id } });
         }
 
         const user = await User.findByPk(id);
@@ -58,4 +58,4 @@ const updatePlayerWins = async (id) => {
 
 
 
-module.exports = { calcHandValue, updateDataBaseBalance, calculateNewBalance, isBust, updatePlayerWins };
+module.exports = { calcHandValue, updateDataBaseBalance, calculateNewBalance, isBust, updatePlayerWins};

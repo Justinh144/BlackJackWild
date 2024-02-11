@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 const initializeGameUI = () => {
     try {
         splitBtn.addEventListener('click', () => {
-            split();
+            // split();
         });
         hitBtn.addEventListener('click', () => {
             hit();
@@ -98,9 +98,9 @@ const initializeGameUI = () => {
                     case 'x':
                         doubleDn();
                         break;
-                    case 't':
-                        split();
-                        break;
+                    // case 't':
+                        // split();
+                        // break;
                     case 'b': 
                         sendBet(100);
                         break;
@@ -176,9 +176,7 @@ const hit = async () => {
             if (data.message === 'You Busted!') {
                 hideCard.removeAttribute('src');
                 loss(data.message);
-            } else if (data.message === 'Blackjack!') {
-                blackJack(data.message);
-            }
+            } 
         }
 
     } catch (error) {
@@ -247,6 +245,7 @@ const sendBet = async (placedBet) => {
         const data = await response.json();
         console.log(data);
         currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
+        bankRoll.textContent = `Bankroll : $${data.gameState.playerBalance - data.gameState.playerBet}`
 
         if (data.error) {
             showMessage(data.error)
@@ -272,11 +271,19 @@ const doubleDn = async () => {
         });
         const data = await response.json();
         console.log(data);
-        currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
 
         if (data.error) {
-            showMessage(data.error);
-        }
+            return showMessage(data.error);
+        } 
+        playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[2].filename);
+        currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
+        bankRoll.textContent = `Bankroll: $${data.gameState.playerBalance - data.gameState.playerBet}`;
+    
+            if (data.message === 'bust') {
+                loss('You Busted!')
+            } else {
+                stay();
+            }
     } catch (error) {
         console.error("Error:", error);
     }
@@ -363,7 +370,6 @@ const drawComputerCard = async () => {
                 loss('You Lost!');
             }
         }
-
     } catch(error) {
         console.error(error);
     }
@@ -586,18 +592,18 @@ const blackJack = async (message) => {
     }
 };
 
-const updatePlayerWins = async () => {
-    try {
-        const response = await fetch("/api/classic/wins", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-        });
-        const data = await response.json();
-        console.log(data);
-    } catch (error) {
-        console.error("Error updating player wins:", error);
-    }
-};
+// const updatePlayerWins = async () => {
+//     try {
+//         const response = await fetch("/api/classic/wins", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify({}),
+//         });
+//         const data = await response.json();
+//         console.log(data);
+//     } catch (error) {
+//         console.error("Error updating player wins:", error);
+//     }
+// };
