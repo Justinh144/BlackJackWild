@@ -344,11 +344,18 @@ router.post('/bet', async (req, res) => {
 
         const { placedBet } = req.body;
         let playerBet = req.session.gameState.playerBet;
+        let playerBalance = req.session.gameState.playerBalance;
 
         if (req.session.gameState.playerHand.length !== 0 || req.session.gameState.splitHand1.length !== 0 || req.session.gameState.splitHand2.length !== 0 || req.session.gameState.computerHand.length !== 0) {
             return res.status(200).json({ error: 'You cannot place a bet after dealing!', gameState: req.session.gameState})
         } else { 
             playerBet += placedBet;
+        }
+
+        const user = await User.findByPk(req.session.user_id);
+
+        if (playerBet > playerBalance) {
+            return res.status(200).json({ error: 'You cannot bet more than your balance!', gameState: req.session.gameState, user: user});
         }
 
         req.session.gameState.playerBet = playerBet;
@@ -415,16 +422,15 @@ router.post('/win', async (req, res) => {
         gameState.handBusts = false;
         gameState.playerBalance = gameState.playerBalance + gameState.playerBet;
         gameState.playerBet = 0;
-        
+      
         const user= await User.findByPk(req.session.user_id);
-        user.wins += 1;
-        await user.save();
 
         res.status(200).json({ message: 'res object after win', outcome: 'You Win!' ,gameState: gameState, user: user});
     } catch(err) {
         res.status(500).json({ message: `Error at /win: ${err}`});
     }
 });
+
 
 router.post('/blackjack', async (req, res) => {
     try{

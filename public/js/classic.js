@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 const initializeGameUI = () => {
     try {
         splitBtn.addEventListener('click', () => {
-            split();
+            // split();
         });
         hitBtn.addEventListener('click', () => {
             hit();
@@ -98,9 +98,9 @@ const initializeGameUI = () => {
                     case 'x':
                         doubleDn();
                         break;
-                    case 't':
-                        split();
-                        break;
+                    // case 't':
+                        // split();
+                        // break;
                     case 'b': 
                         sendBet(100);
                         break;
@@ -247,6 +247,7 @@ const sendBet = async (placedBet) => {
         const data = await response.json();
         console.log(data);
         currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
+        bankRoll.textContent = `Bankroll : $${user.chipCount - playerBet}`
 
         if (data.error) {
             showMessage(data.error)
@@ -363,7 +364,6 @@ const drawComputerCard = async () => {
                 loss('You Lost!');
             }
         }
-
     } catch(error) {
         console.error(error);
     }
@@ -586,18 +586,18 @@ const blackJack = async (message) => {
     }
 };
 
-const updatePlayerWins = async () => {
-    try {
-        const response = await fetch("/api/classic/wins", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-        });
-        const data = await response.json();
-        console.log(data);
-    } catch (error) {
-        console.error("Error updating player wins:", error);
-    }
-};
+// const updatePlayerWins = async () => {
+//     try {
+//         const response = await fetch("/api/classic/wins", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             },
+//             body: JSON.stringify({}),
+//         });
+//         const data = await response.json();
+//         console.log(data);
+//     } catch (error) {
+//         console.error("Error updating player wins:", error);
+//     }
+// };
