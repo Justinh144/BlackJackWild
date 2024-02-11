@@ -417,10 +417,13 @@ router.post('/win', async (req, res) => {
         gameState.playerBet = 0;
         
         const user= await User.findByPk(req.session.user_id);
-        user.wins += 1;
-        await user.save();
-
-        res.status(200).json({ message: 'res object after win', outcome: 'You Win!' ,gameState: gameState, user: user});
+    
+        res.status(200).json({ message: 'res object after win', 
+        outcome: 'You Win!' ,
+        gameState: gameState, 
+        user: user, 
+        audio: '/audio/Win.mp3'
+    });
     } catch(err) {
         res.status(500).json({ message: `Error at /win: ${err}`});
     }
