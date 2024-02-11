@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User, Card } = require('../../models');
 const  { Game } = require('../../utils/gameplay/Game');
-const { calcHandValue, updateDataBaseBalance, calculateNewBalance, isBust, updatePlayerWins } = require('../../utils/helpers');
+const { calcHandValue, updateDataBaseBalance, calculateNewBalance, updatePlayerWins } = require('../../utils/helpers');
 const withAuth = require('../../utils/auth');
 
 router.get('/initialize', withAuth, async (req, res) => {
@@ -16,7 +16,7 @@ router.get('/initialize', withAuth, async (req, res) => {
             deck: game.deck,
             playerBalance: game.playerBalance,
             playerHand: [],
-            playerBet: null,
+            playerBet: 0,
             computerHand: [],
             split: false,
             splitHand1: [],
@@ -24,6 +24,7 @@ router.get('/initialize', withAuth, async (req, res) => {
             isUserSplitHand1: true,
             handBusts: false,
             doubleDn: false,
+            playerStay: false,
         };
         
         return res.status(200).json({message: 'new Game created', game: req.session.game, gameState: req.session.gameState});
@@ -42,89 +43,86 @@ router.post('/hit', async (req, res) => {
         let playerBalance = req.session.gameState.playerBalance;
         let computerHand = req.session.gameState.computerHand;
         let playerBet = req.session.gameState.playerBet;
-        let splitHand1 = req.session.gameState.splitHand1;
-        let splitHand2 = req.session.gameState.splitHand2;
-        let isUserSplitHand1 = req.session.gameState.isUserSplitHand1;
-        let split = req.session.gameState.split;
+        // let splitHand1 = req.session.gameState.splitHand1;
+        // let splitHand2 = req.session.gameState.splitHand2;
+        // let isUserSplitHand1 = req.session.gameState.isUserSplitHand1;
+        // let split = req.session.gameState.split;
         let handBusts = req.session.gameState.handBusts;
         let doubleDn = req.session.gameState.doubleDn;
 
         if (playerBet === null || playerBet === undefined || playerBet === 0) {
             return res.status(200).json({ error: 'Please place a bet first', gameState: req.session.gameState });
         }
-        if (calcHandValue(playerHand) > 21 || calcHandValue(playerHand) === 21 || playerHand.length > 5 || doubleDn === true) {
+        if (playerHand.length > 5 || doubleDn === true || handBusts === true) {
             return res.status(200).json({ error: 'You cannot hit again!', gameState: req.session.gameState});
         }
 
         // SPLIT FUNCTIONALITY WORK IN PROGRESS //
-        if (split) {
-            if ((splitHand1.length === null || splitHand1.length === undefined || splitHand1.length === 0)&&
-                (splitHand2.length === null || splitHand2.length === undefined || splitHand2.length === 0)) {
+        // if (split) {
+        //     if ((splitHand1.length === null || splitHand1.length === undefined || splitHand1.length === 0)&&
+        //         (splitHand2.length === null || splitHand2.length === undefined || splitHand2.length === 0)) {
 
-                return res.status(200).json({ error: 'Did not split hands, please try again', gameState: req.session.gameState});
-            }
-            let playingHand;
-            let bustHand;
-            if (isUserSplitHand1) {
-                playingHand = splitHand1;
-                bustHand = splitHand2;
-            } else {
-                playingHand = splitHand2;
-                bustHand = splitHand1;
-            }
+        //         return res.status(200).json({ error: 'Did not split hands, please try again', gameState: req.session.gameState});
+        //     }
+        //     let playingHand;
+        //     let bustHand;
+        //     if (isUserSplitHand1) {
+        //         playingHand = splitHand1;
+        //         bustHand = splitHand2;
+        //     } else {
+        //         playingHand = splitHand2;
+        //         bustHand = splitHand1;
+        //     }
 
-            if (playingHand.length === 0) {
-                return res.status(200).json({ error: 'You must deal cards for the current hand!', gameState: req.session.gameState });
-            }
+        //     if (playingHand.length === 0) {
+        //         return res.status(200).json({ error: 'You must deal cards for the current hand!', gameState: req.session.gameState });
+        //     }
 
-            const newCard = deck.shift();
-            playingHand.push(newCard);
+        //     const newCard = deck.shift();
+        //     playingHand.push(newCard);
 
-            console.log(playingHand);
-            deck.push(newCard);
+        //     console.log(playingHand);
+        //     deck.push(newCard);
 
-            const total = calcHandValue(playingHand);
+        //     const total = calcHandValue(playingHand);
 
-            if (total > 21) {
-                const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, 'loss');
-                await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
+        //     if (total > 21) {
+        //         const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, 'loss');
+        //         await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
 
-                req.session.gameState.handBusts = true;
+        //         req.session.gameState.handBusts = true;
 
-                req.session.gameState.playerBalance = newPlayerBalance;
-                if (isUserSplitHand1) {
-                    req.session.gameState.splitHand1 = [];
-                } else {
-                    req.session.gameState.splitHand2 = [];
-                }
+        //         req.session.gameState.playerBalance = newPlayerBalance;
+        //         if (isUserSplitHand1) {
+        //             req.session.gameState.splitHand1 = [];
+        //         } else {
+        //             req.session.gameState.splitHand2 = [];
+        //         }
 
-                if ((splitHand1.length === 0 || isBust(splitHand1)) && (splitHand2.length === 0 || isBust(splitHand2))) {
-                    req.session.gameState.computerHand = [];
-                    req.session.gameState.playerBet = 0;
-                    req.session.gameState.split = false;
-                } else {
-                    req.session.gameState.playerBet = playerBet;
-                    req.session.gameState.computerHand = computerHand;
-                }
+        //         if ((splitHand1.length === 0 || isBust(splitHand1)) && (splitHand2.length === 0 || isBust(splitHand2))) {
+        //             req.session.gameState.computerHand = [];
+        //             req.session.gameState.playerBet = 0;
+        //             req.session.gameState.split = false;
+        //         } else {
+        //             req.session.gameState.playerBet = playerBet;
+        //             req.session.gameState.computerHand = computerHand;
+        //         }
 
-                if (req.session.gameState.splitHand1.length === 0 && req.session.gameState.splitHand2.length === 0) {
-                    req.session.gameState.isUserSplitHand1 = true;
-                } else if (req.session.gameState.splitHand1.length === 0 && req.session.gameState.splitHand2.length !== 0) {
-                    req.session.gameState.isUserSplitHand1 = false;
-                } else if (req.session.gameState.splitHand2.length === 0 && req.session.gameState.splitHand1.length !== 0) {
-                    req.session.gameState.isUserSplitHand1 = true;
-                }
-                console.log(`You lose! Player busts!`);
-                console.log('gameState at user Hit and Bust', req.session.gameState);
-            } else {
+        //         if (req.session.gameState.splitHand1.length === 0 && req.session.gameState.splitHand2.length === 0) {
+        //             req.session.gameState.isUserSplitHand1 = true;
+        //         } else if (req.session.gameState.splitHand1.length === 0 && req.session.gameState.splitHand2.length !== 0) {
+        //             req.session.gameState.isUserSplitHand1 = false;
+        //         } else if (req.session.gameState.splitHand2.length === 0 && req.session.gameState.splitHand1.length !== 0) {
+        //             req.session.gameState.isUserSplitHand1 = true;
+        //         }
+        //         console.log(`You lose! Player busts!`);
+        //         console.log('gameState at user Hit and Bust', req.session.gameState);
+        //     } else {
 
-            }
+        //     }
         // END OF SPLIT FUNCTIONALITY //
 
-        } else {
-            if (calcHandValue(playerHand) > 21) {
-                return res.status(200).json({ error: 'You cannot hit again!', gameState: req.session.gameState});
-            }
+         
 
             if (playerHand.length === null || playerHand.length === undefined || playerHand.length === 0) {
                 return res.status(200).json({ error: 'You must deal cards!', gameState: req.session.gameState });
@@ -155,6 +153,7 @@ router.post('/hit', async (req, res) => {
                     if (newHandValue > 21) {
                         const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, 'loss');
                         await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
+                        req.session.gameState.handBusts = true;
                         return res.status(200).json({ message: 'You Busted!', route: 'hit', gameState: req.session.gameState });
                     } else {
                         req.session.gameState.playerHand = playerHand;
@@ -165,12 +164,14 @@ router.post('/hit', async (req, res) => {
                 } else {
                     const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, 'loss');
                     await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
+                    req.session.gameState.handBusts = true;
                     return res.status(200).json({ message: 'You Busted!', route: 'hit', gameState: req.session.gameState });
                 }
+            } else if (req.session.gameState.playerHand.length === 5){
+                return res.status(200).json({ message: 'stay', route:'hit', gameState: req.session.gameState});
             } else {
                 return res.status(200).json({ message: 'hit', route: 'hit', gameState: req.session.gameState})
             }  
-        }
     } catch(err) {
         res.status(500).json({ error: `Failed to hit: ${err}`});
     }
@@ -183,6 +184,11 @@ router.post('/stay', async (req, res) => {
         let deck = req.session.gameState.deck;
         let playerBalance = req.session.gameState.playerBalance;
         let playerBet = req.session.gameState.playerBet;
+        let playerStay = req.session.gameState.playerStay;
+
+        if (playerStay === true) {
+            return res.status({ error: 'You cannot stay twice!', gameState: req.session.gameState});
+        }
 
         if (playerBet === null || playerBet === undefined || playerBet === 0) {
             return res.status(200).json({ error: 'Please place a bet first',gameState: req.session.gameState });
@@ -192,29 +198,20 @@ router.post('/stay', async (req, res) => {
             return res.status(200).json({ error: 'You must deal cards!',gameState: req.session.gameState });
         }
 
+
         if (calcHandValue(computerHand) >= 17) {
-            return res.status(200).json({ stayMessage: 'Dealer stay', gameState: req.session.gameState})
+            req.session.gameState.playerStay = true;
+            return res.status(200).json({ stayMessage: 'Dealer stay', gameState: req.session.gameState});
         } 
         if (calcHandValue(computerHand) > 21) {
-            const aces = computerHand.filter(card => card.value === 11);
-            if (aces.length) {
-                const index = computerHand.findIndex(card => card.value === 11);
-                req.session.gameState.computerHand[index].value = 1;
-                const newHandValue = calcHandValue(req.session.gameState.computerHand);
-                if (newHandValue > 21) {
-                    stayMessage = 'Dealer bust';
-                } else {
-                    stayMessage = 'Dealer hit';
-                }
-            } else {
-                stayMessage = 'Dealer bust';
-            }
+            req.session.gameState.playerStay = true;
+            stayMessage = 'Dealer bust';
+            return res.status(200).json({ stayMessage: stayMessage, gameState: req.session.gameState});
         } else {
             stayMessage = 'Dealer hit';
+            req.session.gameState.playerStay = true;
+            return res.status(200).json({ stayMessage: stayMessage, gameState: req.session.gameState});
         }
-
-        console.log('stay route')
-        return res.status(200).json({ message: 'res object after stay', stayMessage: stayMessage, gameState: req.session.gameState});
     } catch(err) {
         res.status(500).json({ error: `Failed to stay: ${err}`});
     }
@@ -314,6 +311,7 @@ router.post('/doubledn', async (req, res) => {
                 if (newHandValue > 21) {
                     const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, 'loss');
                     await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
+                    req.session.gameState.handBusts = true;
                     return res.status(200).json({ message: 'bust', route: 'doubledn', gameState: req.session.gameState });
                 } else {
                     req.session.gameState.playerHand = playerHand;
@@ -324,6 +322,7 @@ router.post('/doubledn', async (req, res) => {
             } else {
                 const newPlayerBalance = calculateNewBalance(playerBalance, playerBet, 'loss');
                 await updateDataBaseBalance(req.session.user_id, newPlayerBalance);
+                req.session.gameState.handBusts = true;
                 return res.status(200).json({ message: 'bust', route: 'doubledn', gameState: req.session.gameState });
             }
         } else {
@@ -361,10 +360,16 @@ router.post('/deal', async (req, res) => {
         computerHand.push(card2, card4);
         deck.push(card1, card2, card3, card4);
 
-        const aces = playerHand.filter(card => card.value === 11);
-        if (aces.length === 2) {
+        const playerAces = playerHand.filter(card => card.value === 11);
+        if (playerAces.length === 2) {
             const index = playerHand.findIndex(card => card.value === 11);
             req.session.gameState.playerHand[index].value = 1;
+        }
+
+        const compAces = computerHand.filter(card => card.value === 11);
+        if (compAces.length === 2) {
+            const index = computerHand.findIndex(card => card.value === 11);
+            req.session.gameState.computerHand[index].value = 1;
         }
 
         req.session.gameState.playerHand = playerHand;
@@ -454,6 +459,7 @@ router.post('/win', async (req, res) => {
         gameState.handBusts = false;
         gameState.playerBalance = gameState.playerBalance + gameState.playerBet;
         gameState.playerBet = 0;
+        gameState.playerStay = false;
         gameState.doubleDn = false;
       
         const user= await User.findByPk(req.session.user_id);
@@ -479,6 +485,7 @@ router.post('/blackjack', async (req, res) => {
         gameState.playerHand = [];
         gameState.handBusts = false;
         gameState.playerBalance = gameState.playerBalance + (gameState.playerBet * (3/2));
+        gameState.playerStay = false;
         gameState.playerBet = 0;
 
         const user = await User.findByPk(req.session.user_id);
@@ -502,6 +509,7 @@ router.post('/loss', async (req, res) => {
         gameState.playerBalance = gameState.playerBalance - gameState.playerBet;
         gameState.playerBet = 0;
         gameState.doubleDn = false;
+        gameState.playerStay = false;
 
         const user = await User.findByPk(req.session.user_id);
 
@@ -520,6 +528,7 @@ router.post('/push', (req, res) => {
         gameState.playerBalance = gameState.playerBalance;
         gameState.playerBet = 0;
         gameState.doubleDn = false;
+        gameState.playerStay = false;
 
         
         res.status(200).json({ message: 'res object after push', outcome: 'Push', gameState: gameState});
@@ -532,15 +541,36 @@ router.post('/drawcomputercard', (req, res) => {
     try {  
         let computerHand = req.session.gameState.computerHand;
         let deck = req.session.gameState.deck;
+        if (computerHand.length < 5) {
+            const newCard = deck.shift();
+            computerHand.push(newCard);
+            deck.push(newCard);
+            return res.status(200).json({ message: 'Dealer draw', gameState: req.session.gameState});
+        } else {
+            return res.status(200).json({ message: 'Dealer stay', gameState: req.session.gameState});
+        }
 
-        const newCard = deck.shift();
-        computerHand.push(newCard);
-        deck.push(newCard);
-
-        res.status(200).json({ message: 'res object after drawComputerCard', gameState: req.session.gameState});
     } catch(err) {
         res.status(500).json({ error: 'error at /drawcomputercard'})
     }
 });
+
+router.post('/reload', async (req, res) => {
+    try {
+    let playerBalance = req.session.gameState.playerBalance;
+    if (playerBalance <= 100) {
+            await User.update(
+                { chipCount: 20000 },
+                { where: { id: req.session.user_id }}
+            );   
+            req.session.gameState.playerBalance = 20000;
+            return res.status(200).json({ message: 'Chips reloaded', gameState: req.session.gameState})
+        } else {
+            return res.status(200).json({ error: 'Cannot reload chips unless less than 100!'})
+        }
+    } catch (err) {
+        res.status(500).json({ error: 'error at /reload'});
+    }
+})
 
 module.exports = router

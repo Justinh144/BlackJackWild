@@ -19,6 +19,7 @@ const compCard4 = document.querySelector('#compCard4');
 const compCard5 = document.querySelector('#compCard5');
 const bankRoll = document.querySelector('.current_bankroll');
 const hideCard = document.querySelector('#hideCard');
+const reloadChipBtn = document.querySelector('#reload_button');
 
 const calcHandValue = (hand) => {
     let total = 0;
@@ -125,6 +126,9 @@ const initializeGameUI = () => {
         //         console.error('Error toggling hand:', err);
         //     }
         // });
+        reloadChipBtn.addEventListener('click',() => {
+            reloadChips();
+        })
 
 
     } catch (err) {
@@ -156,8 +160,13 @@ const hit = async () => {
                 playerCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
             });
 
-            if (playerHand.length === 5 && data.message !== 'You Busted!') {
-                stay();
+            if (data.gameState.playerHand.length === 5) {
+                if (calcHandValue(data.gameState.playerHand) > 21) {
+                    hideCard.removeAttribute('src');
+                    loss('You Busted!');
+                } else {
+                    stay();
+                }
             } else if (data.message === 'You Busted!') {
                 hideCard.removeAttribute('src');
                 loss(data.message);
@@ -339,7 +348,7 @@ const drawComputerCard = async () => {
 
         let playerTotal;
         let computerTotal;
-        if (calcHandValue(data.gameState.computerHand) < 17){
+        if (calcHandValue(data.gameState.computerHand) < 16){
             drawComputerCard();
         } else {
             hideCard.removeAttribute('src');
@@ -386,7 +395,7 @@ const stay = async () => {
     
             let playerTotal = 0;
             let computerTotal = 0;
-            if (data.stayMessage === 'Dealer stay'){
+            if (data.stayMessage === 'Dealer stay' || data.gameState.playerHand.length === 5){
                 playerTotal = calcHandValue(data.gameState.playerHand);
                 computerTotal = calcHandValue(data.gameState.computerHand);
                 console.log(playerTotal);
@@ -403,7 +412,7 @@ const stay = async () => {
                 }
             } else if (data.stayMessage === 'Dealer hit'){
                 drawComputerCard();
-            }
+            } 
         }
 
     } catch (err) {
@@ -576,6 +585,27 @@ const blackJack = async (message) => {
 
     } catch (error) {
         console.error("Error:", error);
+    }
+};
+
+const reloadChips =async () => {
+    try{
+        const response = await fetch("/api/classic/reload", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+        const data = await response.json();
+        console.log(data);
+        if (data.error) {
+            showMessage(data.error);
+        } else {
+            bankRoll.textContent = `Bankroll: $${data.gameState.playerBalance}`;
+        }
+    }catch (error) {
+        console.log(error)
     }
 };
 
