@@ -132,24 +132,6 @@ const initializeGameUI = () => {
     }
 };
 
-// const bust = async () => {
-//     try {
-//         const response = await fetch("/api/classic/bust", {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({}),
-//         });
-//         const data = await response.json();
-//         console.log(data);
-//         showMessage(data.outcome);
-//         loss('You Busted!');
-
-//     } catch (error) {
-//         console.error("Error:", error);
-//     }
-// };
 
 
 const hit = async () => {
@@ -173,7 +155,10 @@ const hit = async () => {
                 const playerCardSlot = document.getElementById(`card${index + 1}`);
                 playerCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
             });
-            if (data.message === 'You Busted!') {
+
+            if (playerHand.length === 5 && data.message !== 'You Busted!') {
+                stay();
+            } else if (data.message === 'You Busted!') {
                 hideCard.removeAttribute('src');
                 loss(data.message);
             } 
@@ -275,13 +260,15 @@ const doubleDn = async () => {
         if (data.error) {
             return showMessage(data.error);
         } 
+
+        hideCard.removeAttribute('src');
         playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[2].filename);
         currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
         bankRoll.textContent = `Bankroll: $${data.gameState.playerBalance - data.gameState.playerBet}`;
     
             if (data.message === 'bust') {
                 loss('You Busted!')
-            } else {
+            } else if (data.message = 'stay'){
                 stay();
             }
     } catch (error) {
