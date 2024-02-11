@@ -176,9 +176,7 @@ const hit = async () => {
             if (data.message === 'You Busted!') {
                 hideCard.removeAttribute('src');
                 loss(data.message);
-            } else if (data.message === 'Blackjack!') {
-                blackJack(data.message);
-            }
+            } 
         }
 
     } catch (error) {
@@ -247,7 +245,7 @@ const sendBet = async (placedBet) => {
         const data = await response.json();
         console.log(data);
         currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
-        bankRoll.textContent = `Bankroll : $${user.chipCount - playerBet}`
+        bankRoll.textContent = `Bankroll : $${data.gameState.playerBalance - data.gameState.playerBet}`
 
         if (data.error) {
             showMessage(data.error)
@@ -273,11 +271,19 @@ const doubleDn = async () => {
         });
         const data = await response.json();
         console.log(data);
-        currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
 
         if (data.error) {
-            showMessage(data.error);
-        }
+            return showMessage(data.error);
+        } 
+        playerCard3.setAttribute('src', './images/card_images/' + data.gameState.playerHand[2].filename);
+        currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
+        bankRoll.textContent = `Bankroll: $${data.gameState.playerBalance - data.gameState.playerBet}`;
+    
+            if (data.message === 'bust') {
+                loss('You Busted!')
+            } else {
+                stay();
+            }
     } catch (error) {
         console.error("Error:", error);
     }
