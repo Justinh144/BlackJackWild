@@ -10,6 +10,4 @@ const classicRoutes = require('./classicRoutes');
 // router.use('/wild', wild);
 router.use('/users', userRoutes);
 router.use('/classic', classicRoutes);
-
-
 module.exports = router;

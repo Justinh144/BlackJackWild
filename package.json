@@ -19,6 +19,7 @@
     "express-handlebars": "^5.3.3",
     "express-session": "^1.17.1",
     "mysql2": "^2.2.5",
+    "node-wav-player": "^0.2.0",
     "play-sound": "^1.1.6",
     "readline-sync": "^1.4.10",
     "sequelize": "^6.3.5"

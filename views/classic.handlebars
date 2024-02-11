@@ -117,17 +117,25 @@
                         <p class="current_wager roboto">Current Wager: $0</p>
                     </div>
                     <div class="chip_img_container">
+
+
                         <button class="chips" id="chips_100" value="100">
+                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
+
+
                             <img src="./images/chip_images/chip_100.png">
                             </button>
                         <button class="chips" id="chips_500" value="500">
+                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
                             <img src="./images/chip_images/chip_500.png">
                             </button>
                         {{!-- </div> --}}
                         <button class="chips" id="chips_1000" value="1000">
+                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
                             <img src="./images/chip_images/chip_1000.png">
                             </button>
                         <button class="chips" id="chips_2500" value="2500">
+                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
                             <img src="./images/chip_images/chip_2500.png">
                             </button>
                     </div>
@@ -202,10 +210,12 @@
                 <div class="menu">
 
                 <div class="bet_menu">
-                    <div class="bet_btn" id="deal_btn">
+                  <div class="bet_btn" id="deal_btn">
+                        <audio id="audioPlayer2" src="/audio/CardFlip.mp3"></audio>
                         <button class="button" id="deal_button"><h3>Deal <span class="key">  (d)</span></h3></button>
                     </div>
                     <div class="bet_btn" id="hit_btn">
+                        <audio id="audioPlayer3" src="/audio/CardFlip.mp3"></audio>
                         <button class="button" id="hit_button"><h3>Hit <span class="key">  (h)</span></h3></button>
                     </div>
                     <div class="bet_btn" id="stay_btn">
@@ -234,7 +244,7 @@
     </div>
     <div>
     <audio controls autoplay>
-    <source src="../../audio/casino.mp3" type="audio/mpeg">
+    <source src="/audio/casino.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
@@ -242,3 +252,4 @@
 
     <script src="./js/card_flip_script.js"></script>
     <script src="./js/classic.js"></script>
+    <script src="./js/audio.js"></script>
