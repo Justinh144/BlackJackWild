@@ -566,6 +566,6 @@ router.post('/reload', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: 'error at /reload'});
     }
-})
+});
 
 module.exports = router
