@@ -20,6 +20,7 @@ const compCard5 = document.querySelector('#compCard5');
 const bankRoll = document.querySelector('.current_bankroll');
 const hideCard = document.querySelector('#hideCard');
 const reloadChipBtn = document.querySelector('#reload_button');
+const logoutBtn = document.querySelector('#log_out_button');
 
 const calcHandValue = (hand) => {
     let total = 0;
@@ -125,7 +126,11 @@ const initializeGameUI = () => {
         // });
         reloadChipBtn.addEventListener('click',() => {
             reloadChips();
-        })
+        });
+        logoutBtn.addEventListener('click', () => {
+            console.log('success');
+            logout();
+        });
 
 
     } catch (err) {
@@ -575,3 +580,22 @@ const reloadChips =async () => {
         console.log(error)
     }
 };
+
+const logout = async () => {
+    try {
+        const response = await fetch("/api/users/logout", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+        });
+        if (response.ok) {
+            window.location.href = '/';
+          } else {
+            res.status(500).json({ message: 'server error'});
+          }
+    } catch(err) {
+
+    }
+}
