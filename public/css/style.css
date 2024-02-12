@@ -111,14 +111,14 @@ a {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    height: 20%;
+    height: 25%;
     font-size: .5em;
 }
 
 .menu_btn a {
     margin: .2em;
     height: 90%;
-    line-height: 2;
+    line-height: 3;
 }
 
 .menu_btn h3 {
@@ -130,6 +130,7 @@ a {
 #deck_btn a h3:hover::after {
     content: " - Coming Soon!";
 }
+
 .dealer_container {
     background-image: url('../images/table_images/tablegraphics_dealer.png');
     background-size: contain;
