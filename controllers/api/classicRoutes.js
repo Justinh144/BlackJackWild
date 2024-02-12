@@ -9,8 +9,6 @@ router.get('/initialize', withAuth, async (req, res) => {
         const game = new Game(req.session.user_id);
         await game.initialize();
 
-        console.log('game at initialization', game);
-
         req.session.game =  game;
         req.session.gameState = {
             deck: game.deck,
@@ -81,7 +79,6 @@ router.post('/hit', async (req, res) => {
         //     const newCard = deck.shift();
         //     playingHand.push(newCard);
 
-        //     console.log(playingHand);
         //     deck.push(newCard);
 
         //     const total = calcHandValue(playingHand);
@@ -115,8 +112,7 @@ router.post('/hit', async (req, res) => {
         //         } else if (req.session.gameState.splitHand2.length === 0 && req.session.gameState.splitHand1.length !== 0) {
         //             req.session.gameState.isUserSplitHand1 = true;
         //         }
-        //         console.log(`You lose! Player busts!`);
-        //         console.log('gameState at user Hit and Bust', req.session.gameState);
+
         //     } else {
 
         //     }
@@ -132,7 +128,6 @@ router.post('/hit', async (req, res) => {
 
             playerHand.push(newCard);
             req.session.gameState.playerHand = playerHand;
-            console.log('playerHand after push', playerHand);
             deck.push(newCard);
             req.session.gameState.deck = deck;
 
@@ -140,7 +135,6 @@ router.post('/hit', async (req, res) => {
             playerHand.forEach((card) => {
                 cardValue += card.value;
             });
-            console.log(cardValue);
             if (cardValue > 21) {
                 const aces = playerHand.filter(card => card.value === 11);
                 if (aces.length) {
@@ -235,7 +229,6 @@ router.post('/split', (req, res) => {
             return res.status(200).json({ error: 'You cannot split hands that do not hold the same value!' , gameState: req.session.gameState});
         }
 
-        console.log(playerHand);
         let splitHand1 = [playerHand[0]];
         let splitHand2 = [playerHand[1]];
 
@@ -254,10 +247,6 @@ router.post('/split', (req, res) => {
         req.session.gameState.splitHand2 = splitHand2;
         req.session.gameState.deck = deck;
 
-        // console.log('gamestate afer splitting', req.session.gameState);
-        // console.log('deck length after splitting', deck.length);
-
-        console.log('split route')
         return res.status(200).json({message: 'res object after split', gameState: req.session.gameState});
     } catch(err) {
         res.status(500).json({ error: `Failed to split: ${err}`});
@@ -375,11 +364,7 @@ router.post('/deal', async (req, res) => {
         req.session.gameState.playerHand = playerHand;
         req.session.gameState.computerHand = computerHand;
         req.session.gameState.deck = deck;
-        // req.session.gameState.handBusts = handBusts;
 
-        // console.log('gamestate after dealing', req.session.gameState);
-
-        console.log('deal route')
         return res.status(200).json({ message: 'res object after dealing', gameState: req.session.gameState});
     } catch(err) {
         res.status(500).json({ error: `Failed to deal: ${err}`});
@@ -407,7 +392,6 @@ router.post('/bet', async (req, res) => {
             return res.status(200).json({ message: 'res object after bet', gameState: req.session.gameState, user: user});
         }
     } catch (err) {
-        console.log(err);
         res.status(500).json({ error: `Failed posting bet: ${err}`});
     }
 });
@@ -421,9 +405,6 @@ router.post('/togglehand', async (req, res) => {
         } else {
             req.session.gameState.isUserSplitHand1 = !req.session.gameState.isUserSplitHand1;
         }
-
-        // console.log('Toggled to', req.session.gameState.isUserSplitHand1 ? 'first split hand' : 'second split hand');
-        // console.log('gamestate after toggling:', req.session.gameState);
 
         const toggledHand = req.session.gameState.isUserSplitHand1 ? 'splitHand1' : 'splitHand2';
 

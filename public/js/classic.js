@@ -75,7 +75,6 @@ const initializeGameUI = () => {
         [...chipBtns].forEach(chip => {
             chip.addEventListener('click', () => {
                 const playerBet = parseInt(chip.value);
-                // console.log(playerBet);
                 sendBet(playerBet);
             });
         });
@@ -117,10 +116,8 @@ const initializeGameUI = () => {
         //     try {
         //         if (event.key === ' ') {
         //             event.preventDefault();
-        //             // console.log('keypress');
         //             await toggleHand();
         //         } else {
-        //             console.log('no split occurred');
         //         }
         //     } catch (err) {
         //         console.error('Error toggling hand:', err);
@@ -152,8 +149,6 @@ const hit = async () => {
         if (data.error) {
             showMessage(data.error);
         } else {
-            console.log(data);
-            console.log(data.gameState.playerHand.length)
 
             data.gameState.playerHand.forEach((card, index) => {
                 const playerCardSlot = document.getElementById(`card${index + 1}`);
@@ -189,13 +184,10 @@ const deal = async () => {
             },
         });
         const data = await response.json();
-        console.log(data);
         if (data.error) {
             showMessage(data.error);
         } else {
             hideCard.setAttribute('src', './images/card_images/card_card_back.png');
-            // console.log('data after dealing is\n',data);
-            // console.log(data.playerHand[0].filename);
     
             document.getElementById('card1').setAttribute('src', './images/card_images/' + data.gameState.playerHand[0].filename);
             document.getElementById('card2').setAttribute('src', './images/card_images/' + data.gameState.playerHand[1].filename);
@@ -219,7 +211,6 @@ const initialize = async () => {
     try {
         const response = await fetch('/api/classic/initialize');
         const data = await response.json();
-        console.log(data);
 
     } catch (err) {
         console.error('Error starting game:', err);
@@ -228,7 +219,6 @@ const initialize = async () => {
 
 const sendBet = async (placedBet) => {
     try {
-        // await initialize();
         const response = await fetch('/api/classic/bet', {
             method: "POST",
             headers: {
@@ -237,7 +227,6 @@ const sendBet = async (placedBet) => {
             body: JSON.stringify({ placedBet }),
         });
         const data = await response.json();
-        console.log(data);
         currentWager.textContent = `Current Wager: $${data.gameState.playerBet}`;
         bankRoll.textContent = `Bankroll : $${data.gameState.playerBalance - data.gameState.playerBet}`
 
@@ -264,7 +253,6 @@ const doubleDn = async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
 
         if (data.error) {
             return showMessage(data.error);
@@ -295,7 +283,6 @@ const split = async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
 
         if (data.error) {
             showMessage(data.error)
@@ -316,10 +303,9 @@ const toggleHand = async () => {
             },
         });
         const data = await response.json();
-        console.log(data);
+
 
         // if (data.success) {
-        //     console.log(data.message);
         // } else {
         //     console.error('Falied to toggle hand:', data.message);
         // }
@@ -339,7 +325,6 @@ const drawComputerCard = async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
 
         data.gameState.computerHand.forEach((card, index) => {
             const compCardSlot = document.getElementById(`compCard${index + 1}`);
@@ -354,8 +339,6 @@ const drawComputerCard = async () => {
             hideCard.removeAttribute('src');
             playerTotal = calcHandValue(data.gameState.playerHand);
             computerTotal = calcHandValue(data.gameState.computerHand);
-            console.log(playerTotal);
-            console.log(computerTotal);
             if(computerTotal > 21) {
                 computerBust();
             } else if (playerTotal > computerTotal) {
@@ -381,7 +364,6 @@ const stay = async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
 
         if (data.error) {
             showMessage(data.error) 
@@ -398,16 +380,11 @@ const stay = async () => {
             if (data.stayMessage === 'Dealer stay' || data.gameState.playerHand.length === 5){
                 playerTotal = calcHandValue(data.gameState.playerHand);
                 computerTotal = calcHandValue(data.gameState.computerHand);
-                console.log(playerTotal);
-                console.log(computerTotal);
                 if (playerTotal > computerTotal) {
-                    console.log('player wins');
                     win('You Win!');
                 } else if (playerTotal === computerTotal) {
-                    console.log('push');
                     push('Push');
                 } else if (playerTotal < computerTotal) {
-                    console.log('player loses');
                     loss('You Lost!');
                 }
             } else if (data.stayMessage === 'Dealer hit'){
@@ -430,8 +407,6 @@ const computerBust = async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
-        // console.log(data.gameState.playerBalance);
         win('Opponent Busts!');
 
     } catch (error) {
@@ -450,7 +425,6 @@ const win = async (message) => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
         showMessage(message);
 
         currentWager.textContent = 'Current Wager: $0';
@@ -487,8 +461,6 @@ const loss = async (message) => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
-        // console.log(data.gameState.playerBalance);
         showMessage(message);
 
         currentWager.textContent = 'Current Wager: $0';
@@ -525,8 +497,6 @@ const push = async (message) => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
-        console.log(data.gameState.playerBalance);
         showMessage(message);
 
         playerCard1.removeAttribute('src');
@@ -562,8 +532,6 @@ const blackJack = async (message) => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
-        console.log(data.gameState.playerBalance);
         showMessage(message);
 
         playerCard1.removeAttribute('src');
@@ -598,7 +566,6 @@ const reloadChips =async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
-        console.log(data);
         if (data.error) {
             showMessage(data.error);
         } else {
@@ -608,19 +575,3 @@ const reloadChips =async () => {
         console.log(error)
     }
 };
-
-// const updatePlayerWins = async () => {
-//     try {
-//         const response = await fetch("/api/classic/wins", {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({}),
-//         });
-//         const data = await response.json();
-//         console.log(data);
-//     } catch (error) {
-//         console.error("Error updating player wins:", error);
-//     }
-// };
