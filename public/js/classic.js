@@ -5,7 +5,6 @@ const doublednBtn = document.querySelector('#doubledn_button');
 const stayBtn = document.querySelector('#stay_button');
 const chipBtns = document.getElementsByClassName('chips');
 
-// id="hidecard" --- hidden
 const currentWager = document.querySelector('.current_wager');
 const playerCard1 = document.querySelector('#card1');
 const playerCard2 = document.querySelector('#card2');
@@ -20,6 +19,9 @@ const compCard5 = document.querySelector('#compCard5');
 const bankRoll = document.querySelector('.current_bankroll');
 const hideCard = document.querySelector('#hideCard');
 const reloadChipBtn = document.querySelector('#reload_button');
+
+let currentHand = 'splitHand1';
+let isUserSplit = false;
 
 const calcHandValue = (hand) => {
     let total = 0;
@@ -42,9 +44,6 @@ const showMessage = (message) => {
         }, 1000);
     }, 3000);
 };
-
-let currentHand = 'splitHand1';
-let isUserSplit = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -136,8 +135,6 @@ const initializeGameUI = () => {
     }
 };
 
-
-
 const hit = async () => {
     try { 
         const response = await fetch("/api/classic/hit", {
@@ -177,8 +174,6 @@ const hit = async () => {
         console.error("Error:", error);
     }
 }
-
-
 
 const deal = async () => {
     try {
@@ -247,11 +242,6 @@ const sendBet = async (placedBet) => {
     } catch (error) {
         console.error("Error:", error);
     }
-}
-
-function updateChipCount(newChipCount) {
-    const chipCountElement = document.querySelector('.chip_count');
-    chipCountElement.textContent = newChipCount;
 }
 
 const doubleDn = async () => {
@@ -474,7 +464,6 @@ const win = async (message) => {
         console.error("Error:", error);
     }
 };
-
 
 const loss = async (message) => {
     try {
