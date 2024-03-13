@@ -3,22 +3,22 @@
             <div class="menu_container">
                 <div class="main_menu">
                     <div class="menu_btn" id="home_btn">
-                        <a href="/profile" class="button">
-                        <button class="button" id="home_button"><h3>Home</h3></button>
+                        <a href="/profile" class="button" id="home_button">
+                        <h3>Home</h3>
                         </a>
                     </div>
-                    <div class="menu_btn" id="account_btn">
-                        <button class="button" id="account_button"><h3>Account</h3></button>
-                    </div>
+                    {{!-- <div class="menu_btn" id="account_btn">
+                        <a href="/" class="button" id="account_button"><h3>Account</h3></a>
+                    </div> --}}
                     <div class="menu_btn" id="deck_btn">
-                        <button class="button" id="custom_deck_button"><h3>Custom Deck</h3></button>
+                        <a href="javascript:void(0)" class="button" id="custom_deck_button"><h3>Custom Deck</h3></a>
                     </div>
                     <div class="menu_btn" id="reload_chips_btn">
-                        <button class="button" id="reload_button"><h3>Reload Chips</h3></button>
+                        <a href="javascript:void(0)" class="button" id="reload_button"><h3>Reload Chips</h3></a>
                     </div>
                     <div class="menu_btn" id="log_out_btn">
-                        <a href="/" class="button">
-                        <button class="button" id="log_out_button"><h3>Log Out</h3></button>
+                        <a href="javascript:void(0)" class="button" id="log_out_button">
+                        <h3>Log Out</h3>
                         </a>
                     </div>
                 </div>
@@ -117,27 +117,31 @@
                         <p class="current_wager roboto">Current Wager: $0</p>
                     </div>
                     <div class="chip_img_container">
-
-
                         <button class="chips" id="chips_100" value="100">
-                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
-
-
                             <img src="./images/chip_images/chip_100.png">
                             </button>
+                            <audio id="audioPlayer">
+                            <source src="/audio/ChipSound.wav">
+                            </audio>
                         <button class="chips" id="chips_500" value="500">
-                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
                             <img src="./images/chip_images/chip_500.png">
                             </button>
+                             <audio id="audioPlayer">
+                            <source src="/audio/ChipSound.wav">
+                            </audio>
                         {{!-- </div> --}}
                         <button class="chips" id="chips_1000" value="1000">
-                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
                             <img src="./images/chip_images/chip_1000.png">
                             </button>
+                             <audio id="audioPlayer">
+                            <source src="/audio/ChipSound.wav">
+                            </audio>
                         <button class="chips" id="chips_2500" value="2500">
-                            <audio id="audioPlayer" src="/audio/ChipSound.wav"></audio>
                             <img src="./images/chip_images/chip_2500.png">
                             </button>
+                             <audio id="audioPlayer">
+                            <source src="/audio/ChipSound.wav">
+                            </audio>
                     </div>
                 </div>
             </div>    
@@ -210,22 +214,32 @@
                 <div class="menu">
 
                 <div class="bet_menu">
-                  <div class="bet_btn" id="deal_btn">
-                        <audio id="audioPlayer2" src="/audio/CardFlip.mp3"></audio>
+                    <div class="bet_btn" id="deal_btn">
                         <button class="button" id="deal_button"><h3>Deal <span class="key">  (d)</span></h3></button>
+                        <audio id="audioPlayer2">
+                            <source src="/audio/CardFlip.mp3" type="audio/mp3">
+                        </audio>
                     </div>
                     <div class="bet_btn" id="hit_btn">
-                        <audio id="audioPlayer3" src="/audio/CardFlip.mp3"></audio>
                         <button class="button" id="hit_button"><h3>Hit <span class="key">  (h)</span></h3></button>
+                        <audio id="audioPlayer3">
+                            <source src="/audio/CardFlip.mp3" type="audio/mp3">
+                        </audio>
                     </div>
                     <div class="bet_btn" id="stay_btn">
                         <button class="button" id="stay_button"><h3>Stay <span class="key">  (s)</span></h3></button>
+                        <audio id="audioPlayer4">
+                            <source src="/audio/Knock1.wav" type="audio/wav">
+                        </audio>
                     </div>
                     <div class="bet_btn" id="split_btn">
                         <button class="button" id="split_button"><h3>Split <span class="key">  (t)</span></h3></button>
                     </div>
                     <div class="bet_btn" id="doubledn_btn">
                         <button class="button" id="doubledn_button"><h3>Double <span class="key">  (x)</span></h3></button>
+                        <audio id="audioPlayer5">
+                            <source src="/audio/ooh.wav" type="audio/wav">
+                        </audio>
                     </div>
 
                 </div>
@@ -243,8 +257,8 @@
 
     </div>
     <div>
-    <audio controls autoplay>
-    <source src="/audio/casino.mp3" type="audio/mpeg">
+    <audio controls autoplay volume="0.5">
+    <source src="../../audio/casino.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 

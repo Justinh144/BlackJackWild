@@ -90,6 +90,39 @@ function playAudio(audioURL) {
     audio.play();
 }
 
+const audio4 = document.getElementById('audioPlayer4');
+const stay_button = document.getElementById('stay_btn');
+
+stay_button.addEventListener('click', () => {
+    try {
+        audio4.play();
+        console.log('Success')
+    } catch (error) {
+        console.log('error');
+    }
+});
+
+function playAudio(audioURL) {
+    const audio = new Audio(audioURL);
+    audio.play();
+}
+
+const audio5 = document.getElementById('audioPlayer5');
+const doubledn_btn = document.getElementById('doubledn_btn');
+
+doubledn_btn.addEventListener('click', () => {
+    try {
+        audio5.play();
+        console.log('Success')
+    } catch (error) {
+        console.log('error');
+    }
+});
+
+function playAudio(audioURL) {
+    const audio = new Audio(audioURL);
+    audio.play();
+}
 // Work in progress //
 fetch('/win', {
     method: 'POST',   

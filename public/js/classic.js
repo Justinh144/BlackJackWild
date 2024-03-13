@@ -19,6 +19,7 @@ const compCard5 = document.querySelector('#compCard5');
 const bankRoll = document.querySelector('.current_bankroll');
 const hideCard = document.querySelector('#hideCard');
 const reloadChipBtn = document.querySelector('#reload_button');
+const logoutBtn = document.querySelector('#log_out_button');
 
 let currentHand = 'splitHand1';
 let isUserSplit = false;
@@ -115,10 +116,8 @@ const initializeGameUI = () => {
         //     try {
         //         if (event.key === ' ') {
         //             event.preventDefault();
-        //             // console.log('keypress');
         //             await toggleHand();
         //         } else {
-        //             console.log('no split occurred');
         //         }
         //     } catch (err) {
         //         console.error('Error toggling hand:', err);
@@ -126,7 +125,11 @@ const initializeGameUI = () => {
         // });
         reloadChipBtn.addEventListener('click',() => {
             reloadChips();
-        })
+        });
+        logoutBtn.addEventListener('click', () => {
+            console.log('success');
+            logout();
+        });
 
 
     } catch (err) {
@@ -148,6 +151,7 @@ const hit = async () => {
         if (data.error) {
             showMessage(data.error);
         } else {
+
             data.gameState.playerHand.forEach((card, index) => {
                 const playerCardSlot = document.getElementById(`card${index + 1}`);
                 playerCardSlot.setAttribute('src', `./images/card_images/${card.filename}`);
@@ -244,6 +248,7 @@ const doubleDn = async () => {
             body: JSON.stringify({}),
         });
         const data = await response.json();
+
         if (data.error) {
             return showMessage(data.error);
         } 
@@ -295,7 +300,6 @@ const toggleHand = async () => {
         const data = await response.json();
 
         // if (data.success) {
-        //     console.log(data.message);
         // } else {
         //     console.error('Falied to toggle hand:', data.message);
         // }
@@ -371,13 +375,10 @@ const stay = async () => {
                 playerTotal = calcHandValue(data.gameState.playerHand);
                 computerTotal = calcHandValue(data.gameState.computerHand);
                 if (playerTotal > computerTotal) {
-                    console.log('player wins');
                     win('You Win!');
                 } else if (playerTotal === computerTotal) {
-                    console.log('push');
                     push('Push');
                 } else if (playerTotal < computerTotal) {
-                    console.log('player loses');
                     loss('You Lost!');
                 }
             } else if (data.stayMessage === 'Dealer hit'){
@@ -566,4 +567,4 @@ const reloadChips =async () => {
     }catch (error) {
         console.log(error)
     }
-};
+}
