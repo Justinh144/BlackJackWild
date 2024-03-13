@@ -5,7 +5,6 @@ const doublednBtn = document.querySelector('#doubledn_button');
 const stayBtn = document.querySelector('#stay_button');
 const chipBtns = document.getElementsByClassName('chips');
 
-// id="hidecard" --- hidden
 const currentWager = document.querySelector('.current_wager');
 const playerCard1 = document.querySelector('#card1');
 const playerCard2 = document.querySelector('#card2');
@@ -21,6 +20,9 @@ const bankRoll = document.querySelector('.current_bankroll');
 const hideCard = document.querySelector('#hideCard');
 const reloadChipBtn = document.querySelector('#reload_button');
 const logoutBtn = document.querySelector('#log_out_button');
+
+let currentHand = 'splitHand1';
+let isUserSplit = false;
 
 const calcHandValue = (hand) => {
     let total = 0;
@@ -43,9 +45,6 @@ const showMessage = (message) => {
         }, 1000);
     }, 3000);
 };
-
-let currentHand = 'splitHand1';
-let isUserSplit = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -138,8 +137,6 @@ const initializeGameUI = () => {
     }
 };
 
-
-
 const hit = async () => {
     try { 
         const response = await fetch("/api/classic/hit", {
@@ -177,8 +174,6 @@ const hit = async () => {
         console.error("Error:", error);
     }
 }
-
-
 
 const deal = async () => {
     try {
@@ -243,11 +238,6 @@ const sendBet = async (placedBet) => {
     }
 }
 
-function updateChipCount(newChipCount) {
-    const chipCountElement = document.querySelector('.chip_count');
-    chipCountElement.textContent = newChipCount;
-}
-
 const doubleDn = async () => {
     try { 
         const response = await fetch("/api/classic/doubledn", {
@@ -308,7 +298,6 @@ const toggleHand = async () => {
             },
         });
         const data = await response.json();
-
 
         // if (data.success) {
         // } else {
@@ -454,7 +443,6 @@ const win = async (message) => {
     }
 };
 
-
 const loss = async (message) => {
     try {
         await new Promise(resolve => setTimeout(resolve, 3000));
@@ -578,24 +566,5 @@ const reloadChips =async () => {
         }
     }catch (error) {
         console.log(error)
-    }
-};
-
-const logout = async () => {
-    try {
-        const response = await fetch("/api/users/logout", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-        });
-        if (response.ok) {
-            window.location.href = '/';
-          } else {
-            res.status(500).json({ message: 'server error'});
-          }
-    } catch(err) {
-
     }
 }

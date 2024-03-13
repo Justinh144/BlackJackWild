@@ -47,7 +47,6 @@ const isBust = (hand) => {
     return totalValue > 21;
 }
 
-
 const updatePlayerWins = async (id) => {
     try {
         await User.increment('handsWon', { by: 1, where: { id } });
@@ -55,7 +54,5 @@ const updatePlayerWins = async (id) => {
         console.error(`Error updating player's win count: ${err}`);
     }
 };
-
-
 
 module.exports = { calcHandValue, updateDataBaseBalance, calculateNewBalance, isBust, updatePlayerWins};

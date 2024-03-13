@@ -10,13 +10,13 @@ router.get('/', (req, res) => {
   res.render('homepage');
 });
 
-router.get('/casino.mp3', (req, res) => {
-  res.sendFile('../../audio/casino.mp3', {
-    headers: {
-      'Content-Type': 'audio/mpeg',
-    },
-  });
-});
+// router.get('/casino.mp3', (req, res) => {
+//   res.sendFile('../../audio/casino.mp3', {
+//     headers: {
+//       'Content-Type': 'audio/mpeg',
+//     },
+//   });
+// });
 
 // Comment out this part to mute audio
 

@@ -32,8 +32,6 @@ router.get('/initialize', withAuth, async (req, res) => {
     }
 });
 
-
-
 router.post('/hit', async (req, res) => {
     try{
         let playerHand = req.session.gameState.playerHand;
@@ -371,7 +369,6 @@ router.post('/deal', async (req, res) => {
     }
 });
 
-
 router.post('/bet', async (req, res) => {
     try{
         const { placedBet } = req.body;
@@ -415,7 +412,6 @@ router.post('/togglehand', async (req, res) => {
     }
 });
 
-
 router.post('/computerbust', (req, res) => {
     try {
         const { gameState } = req.session;
@@ -453,7 +449,6 @@ router.post('/win', async (req, res) => {
         res.status(500).json({ message: `Error at /win: ${err}`});
     }
 });
-
 
 router.post('/blackjack', async (req, res) => {
     try{
@@ -552,6 +547,6 @@ router.post('/reload', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: 'error at /reload'});
     }
-})
+});
 
 module.exports = router
