@@ -9,7 +9,7 @@ Welcome to Black Jack Wild, where the cards are hot and the stakes are hotter!
 - Responsive: play on any device!
 
 ## How To Play
-- Click [here](https://bjw-7b57d3168daf.herokuapp.com/classic) to launch the game.
+- Click [here](https://bjw-6acf89df7f9b.herokuapp.com/classic) to launch the game.
 - Log in or create an account.
 - Place your bets, and click Deal to get the game going!
 
